@@ -1,0 +1,30 @@
+uuid: a6a5a958-1cd6-43bd-8f66-9182ecd5230c
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_system_date
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'System date configuration'
+source:
+  plugin: variable
+  variables:
+    - configurable_timezones
+    - date_first_day
+    - date_default_timezone
+process:
+  timezone/user/configurable: configurable_timezones
+  first_day: date_first_day
+  timezone/default:
+    plugin: timezone
+    source: date_default_timezone
+destination:
+  plugin: config
+  config_name: system.date
+migration_dependencies:
+  required: {  }
+  optional: {  }

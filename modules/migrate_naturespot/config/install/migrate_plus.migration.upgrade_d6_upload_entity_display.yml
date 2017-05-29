@@ -1,0 +1,36 @@
+uuid: be60a9c1-6e02-49fb-9fd9-280f1869eae1
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_upload_entity_display
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'Upload display configuration'
+source:
+  plugin: d6_upload_instance
+  constants:
+    entity_type: node
+    view_mode: default
+    name: upload
+    type: file_default
+    options:
+      label: hidden
+      settings: {  }
+process:
+  entity_type: constants/entity_type
+  bundle: node_type
+  view_mode: constants/view_mode
+  field_name: constants/name
+  type: constants/type
+  options: constants/options
+  options/type: '@type'
+destination:
+  plugin: component_entity_display
+migration_dependencies:
+  required:
+    - upgrade_d6_upload_field_instance
+  optional: {  }

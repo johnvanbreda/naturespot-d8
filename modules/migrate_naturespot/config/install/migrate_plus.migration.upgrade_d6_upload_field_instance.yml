@@ -1,0 +1,40 @@
+uuid: 266f7089-9e24-41fa-85be-351e62e7d803
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_upload_field_instance
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'Upload field instance configuration'
+source:
+  plugin: d6_upload_instance
+  constants:
+    entity_type: node
+    name: upload
+    settings:
+      description_field: 1
+process:
+  entity_type: constants/entity_type
+  bundle:
+    -
+      plugin: migration_lookup
+      migration: d6_node_type
+      source: node_type
+    -
+      plugin: skip_on_empty
+      method: row
+  field_name: constants/name
+  settings: constants/settings
+  settings/file_extensions: file_extensions
+  settings/max_filesize: max_filesize
+destination:
+  plugin: 'entity:field_config'
+migration_dependencies:
+  required:
+    - upgrade_d6_upload_field
+    - upgrade_d6_node_type
+  optional: {  }

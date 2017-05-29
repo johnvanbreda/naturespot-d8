@@ -1,0 +1,6 @@
+[submodule "modules/iform"]
+	path = modules/iform
+	url = https://github.com/Indicia-Team/drupal-8-module-iform.git
+[submodule "modules/indicia_features"]
+	path = modules/indicia_features
+	url = https://github.com/Indicia-Team/drupal-8-modules-indicia_features.git

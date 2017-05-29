@@ -1,0 +1,77 @@
+uuid: 838c1d5d-fc11-453f-97b3-d4a5c5de6b18
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_node_revision_event
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'Node revisions (event)'
+source:
+  plugin: d6_node_revision
+  node_type: event
+process:
+  nid: nid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: und
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  body/format:
+    plugin: migration_lookup
+    migration: d6_filter_format
+    source: format
+  body/value: body
+  body/summary: teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_event_date:
+    plugin: iterator
+    source: field_event_date
+    process:
+      value:
+        plugin: format_date
+        from_format: 'Y-m-d H:i:s'
+        to_format: 'Y-m-d\TH:i:s'
+        source: value
+  field_event_location:
+    plugin: iterator
+    source: field_event_location
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+destination:
+  plugin: 'entity_revision:node'
+  default_bundle: event
+migration_dependencies:
+  required:
+    - upgrade_d6_node_event
+  optional:
+    - upgrade_d6_filter_format
+    - upgrade_d7_filter_format

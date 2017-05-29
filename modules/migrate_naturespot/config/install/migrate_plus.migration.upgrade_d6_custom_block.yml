@@ -1,0 +1,31 @@
+uuid: d4bca1af-fc36-4166-b7c4-1b95419a0bdd
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_custom_block
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'Custom blocks'
+source:
+  plugin: d6_box
+process:
+  id: bid
+  info: info
+  body/format:
+    plugin: migration_lookup
+    migration: d6_filter_format
+    source: format
+  body/value: body
+destination:
+  plugin: 'entity:block_content'
+  default_bundle: basic
+  no_stub: true
+migration_dependencies:
+  required:
+    - upgrade_d6_filter_format
+    - upgrade_block_content_body_field
+  optional: {  }

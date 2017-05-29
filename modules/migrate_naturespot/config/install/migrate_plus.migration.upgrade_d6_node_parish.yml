@@ -1,0 +1,125 @@
+uuid: c546664f-c19c-43c0-95c3-994ed57f3a7d
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_node_parish
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'Nodes (parish)'
+source:
+  plugin: d6_node
+  node_type: parish
+process:
+  nid: tnid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: und
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  body/format:
+    plugin: migration_lookup
+    migration: d6_filter_format
+    source: format
+  body/value: body
+  body/summary: teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_place_image:
+    plugin: d6_cck_file
+    source: field_place_image
+  field_panorama_image:
+    plugin: d6_cck_file
+    source: field_panorama_image
+  field_parish:
+    plugin: iterator
+    source: field_parish
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_banner:
+    plugin: d6_cck_file
+    source: field_banner
+  field_thanks:
+    plugin: iterator
+    source: field_thanks
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_parishupdate:
+    plugin: iterator
+    source: field_parishupdate
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+destination:
+  plugin: 'entity:node'
+  default_bundle: parish
+migration_dependencies:
+  required:
+    - upgrade_d6_user
+    - upgrade_d6_node_type
+    - upgrade_d6_node_settings
+    - upgrade_d6_filter_format
+  optional:
+    - upgrade_d6_field_instance_widget_settings
+    - upgrade_d6_field_formatter_settings
+    - upgrade_d6_upload_field_instance
+    - upgrade_d6_filter_format
+    - upgrade_d7_filter_format

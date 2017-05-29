@@ -1,0 +1,10 @@
+name: Migrate NatureSpot
+description: Custom migrations for NatureSpot
+package: Custom
+
+type: module
+core: 8.x
+
+dependencies:
+  - migrate_drupal:migrate_drupal
+  - migrate_plus:migrate_plus

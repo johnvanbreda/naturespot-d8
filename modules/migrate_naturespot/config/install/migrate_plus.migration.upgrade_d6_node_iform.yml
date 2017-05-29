@@ -1,0 +1,51 @@
+uuid: 6c7ae23e-667a-4e31-9fc0-509bfd2f88ff
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_node_iform
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'Nodes (iform)'
+source:
+  plugin: d6_node
+  node_type: iform
+process:
+  nid: tnid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: und
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  body/format:
+    plugin: migration_lookup
+    migration: d6_filter_format
+    source: format
+  body/value: body
+  body/summary: teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+destination:
+  plugin: 'entity:node'
+  default_bundle: iform
+migration_dependencies:
+  required:
+    - upgrade_d6_user
+    - upgrade_d6_node_type
+    - upgrade_d6_node_settings
+    - upgrade_d6_filter_format
+  optional:
+    - upgrade_d6_field_instance_widget_settings
+    - upgrade_d6_field_formatter_settings
+    - upgrade_d6_upload_field_instance

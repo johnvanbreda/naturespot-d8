@@ -1,0 +1,369 @@
+uuid: ef85da21-746c-4ed2-92b1-4784aed853bf
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d6_node_species
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 6'
+migration_group: migrate_drupal_6
+label: 'Nodes (species)'
+source:
+  plugin: d6_node
+  node_type: species
+process:
+  nid: tnid
+  vid: vid
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: und
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  body/format:
+    plugin: migration_lookup
+    migration: d6_filter_format
+    source: format
+  body/value: body
+  body/summary: teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_habitat:
+    plugin: iterator
+    source: field_habitat
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_when:
+    plugin: iterator
+    source: field_when
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_life_history:
+    plugin: iterator
+    source: field_life_history
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_uk_status:
+    plugin: iterator
+    source: field_uk_status
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_vc55_status:
+    plugin: iterator
+    source: field_vc55_status
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_common_name:
+    plugin: iterator
+    source: field_common_name
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_weight: field_weight
+  field_nbn_number:
+    plugin: iterator
+    source: field_nbn_number
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_description:
+    plugin: iterator
+    source: field_description
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_further_information:
+    plugin: iterator
+    source: field_further_information
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_alt_name:
+    plugin: iterator
+    source: field_alt_name
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_imported_indicia_data:
+    plugin: iterator
+    source: field_imported_indicia_data
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_b_and_f:
+    plugin: iterator
+    source: field_b_and_f
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_similar_species:
+    plugin: iterator
+    source: field_similar_species
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_photo_id:
+    plugin: iterator
+    source: field_photo_id
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+  field_id_guidance:
+    plugin: iterator
+    source: field_id_guidance
+    process:
+      value: value
+      format:
+        -
+          plugin: static_map
+          bypass: true
+          source: format
+          map:
+            - null
+        -
+          plugin: skip_on_empty
+          method: process
+        -
+          plugin: migration
+          migration:
+            - upgrade_d6_filter_format
+            - upgrade_d7_filter_format
+          source: format
+destination:
+  plugin: 'entity:node'
+  default_bundle: species
+migration_dependencies:
+  required:
+    - upgrade_d6_user
+    - upgrade_d6_node_type
+    - upgrade_d6_node_settings
+    - upgrade_d6_filter_format
+  optional:
+    - upgrade_d6_field_instance_widget_settings
+    - upgrade_d6_field_formatter_settings
+    - upgrade_d6_upload_field_instance
+    - upgrade_d6_filter_format
+    - upgrade_d7_filter_format
