@@ -17,7 +17,7 @@ process:
   vid:
     -
       plugin: migration_lookup
-      migration: d6_node
+      migration: upgrade_d6_node
       source: vid
     -
       plugin: skip_on_empty

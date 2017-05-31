@@ -17,7 +17,7 @@ process:
   nid:
     -
       plugin: migration_lookup
-      migration: d6_node
+      migration: upgrade_d6_node
       source: nid
     -
       plugin: skip_on_empty

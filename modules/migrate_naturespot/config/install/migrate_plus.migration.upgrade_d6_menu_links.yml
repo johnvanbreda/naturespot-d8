@@ -19,7 +19,7 @@ process:
   menu_name:
     -
       plugin: migration_lookup
-      migration: d6_menu
+      migration: upgrade_d6_menu
       source: menu_name
     -
       plugin: skip_on_empty

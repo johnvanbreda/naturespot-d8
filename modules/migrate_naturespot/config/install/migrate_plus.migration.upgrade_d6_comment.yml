@@ -18,7 +18,7 @@ process:
   cid: cid
   pid:
     plugin: migration_lookup
-    migration: d6_comment
+    migration: upgrade_d6_comment
     source: pid
   entity_id: nid
   entity_type: constants/entity_type
@@ -37,7 +37,7 @@ process:
   comment_body/value: comment
   comment_body/format:
     plugin: migration_lookup
-    migration: d6_filter_format
+    migration: upgrade_d6_filter_format
     source: format
 destination:
   plugin: 'entity:comment'

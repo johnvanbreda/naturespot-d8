@@ -22,7 +22,7 @@ process:
   field_name:
     -
       plugin: migration_lookup
-      migration: d6_taxonomy_vocabulary
+      migration: upgrade_d6_taxonomy_vocabulary
       source: vid
     -
       plugin: skip_on_empty

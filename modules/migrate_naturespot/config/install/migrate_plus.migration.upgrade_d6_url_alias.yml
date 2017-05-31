@@ -39,9 +39,10 @@ process:
         - 1
     -
       plugin: migration_lookup
-      migration: d6_node_translation
+      migration: upgrade_d6_node_translation
 destination:
   plugin: url_alias
 migration_dependencies:
-  required: {  }
+  required:
+    - upgrade_d6_node_translation
   optional: {  }

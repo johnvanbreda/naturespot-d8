@@ -22,7 +22,7 @@ process:
   bundle:
     -
       plugin: migration_lookup
-      migration: d6_node_type
+      migration: upgrade_d6_node_type
       source: node_type
     -
       plugin: skip_on_empty

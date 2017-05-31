@@ -22,7 +22,7 @@ process:
     process:
       target_id:
         plugin: migration_lookup
-        migration: d6_file
+        migration: upgrade_d6_file
         source: fid
       display: list
       description: description

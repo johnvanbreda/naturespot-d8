@@ -30,11 +30,12 @@ process:
   bundle: type
   field_name:
     plugin: migration_lookup
-    migration: d6_taxonomy_vocabulary
+    migration: upgrade_d6_taxonomy_vocabulary
     source: vid
 destination:
   plugin: component_entity_form_display
 migration_dependencies:
   required:
+    - upgrade_d6_taxonomy_vocabulary
     - upgrade_d6_vocabulary_field_instance
   optional: {  }
