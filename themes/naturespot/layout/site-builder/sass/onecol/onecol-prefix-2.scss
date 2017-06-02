@@ -1,8 +1,0 @@
-@import "../site-builder-base";
-//
-// Prefix two
-//
-
-.onecol-prefix-2 .l-r {
-  @include prefix(2 of 12);
-}
