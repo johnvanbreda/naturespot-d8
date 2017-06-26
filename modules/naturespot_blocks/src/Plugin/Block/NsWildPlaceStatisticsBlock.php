@@ -7,14 +7,14 @@ use Drupal\Core\Form;
 use Drupal\Component\Utility\SafeMarkup;
 
 /**
- * Provides a map block for wild places.
+ * Provides a statistics block for wild places.
  *
  * @Block(
- *   id = "ns_wild_place_latest_image_block",
+ *   id = "ns_wild_place_statistics_block",
  *   admin_label = @Translation("NatureSpot wild place latest_image block"),
  * )
  */
-class NsWildPlaceLatestImageBlock extends BlockBase {
+class NsWildPlacestatisticsBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -22,49 +22,42 @@ class NsWildPlaceLatestImageBlock extends BlockBase {
   public function build() {
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node) {
-      drupal_set_message('NsWildPlaceLatestImageBlock must be placed on a parish or wild place node page');
+      drupal_set_message('NsWildPlacestatisticsBlock must be placed on a parish or wild place node page');
       return array();
     }
     iform_load_helpers(array('report_helper'));
     $config = \Drupal::config('iform.settings');
-    $readAuth = \report_helper::get_read_auth($config->get('website_id'), $config->get('password'));
+    $website_id = $config->get('website_id');
+    $readAuth = \report_helper::get_read_auth($website_id, $config->get('password'));
     $siteName = $node->getTitle() . ($node->getType() === 'parish' ? ' CP' : '');
-    $params = array('month'=>0, 'taxon_group'=>'all','site_name'=>$siteName, 'limit'=>1);
-    $template = <<<HTML
-<li>
-  <div>
-    <a class="colorbox" href="http://warehouse1.indicia.org.uk/upload/{image_path}" title="{common} {taxon}, {recorder}, {date}">
-      <img width="220" src="http://warehouse1.indicia.org.uk/upload/med-{image_path}" alt="{common} {taxon}"/>
-    </a>
-    <div class="panel-region-separator">&nbsp;</div>
-    <strong><a href="{rootFolder}species_by_key?key={external_key}">Learn more about<br/>{common} <em>{taxon}</em></a><br/>
-    {recorder}</strong><br/>
-    {image_caption}<br/>
-  </div>
-</li>
-HTML;
-
-    $options=array(
-      'id'=>'latest-images',
-      'dataSource' => 'naturespot/images_by_site',
+    $options = array(
+      'id' => 'parish-stats',
+      'dataSource' => 'stats/species_and_occurrence_counts_by_taxon_group_filtered_by_named_site',
       'mode' => 'report',
       'readAuth' => $readAuth,
-      'includeAllColumns'=>false,
-      'header' => '<div class="item-list"><ul>',
-      'bands'=>array(
-        array (
-          'content'=>$template
-        )
+      'itemsPerPage' => 30,
+      'autoParamsForm' => TRUE,
+      'extraParams' => array(
+        'site_name' => $siteName,
+        'website_id' => 8,
+        'orderby' => 'species_count',
+        'date_from' => '',
+        'date_to' => '',
+        'survey_id' => '',
+        'sortdir' => desc,
+        'include_total' => 'yes'
       ),
-      'footer' => '</ul></div>',
-      'itemsPerPage' => 1,
-      'autoParamsForm'=>false,
-      'extraParams'=>$params,
-      'class' => 'species-gallery',
+      'columns' => array(
+        array('fieldname' => 'taxongroup', 'display' => 'Species group'),
+        array('fieldname' => 'species_count', 'display' => 'Total no. of species'),
+        array('fieldname' => 'occurrences_count', 'display' => 'Total no. of records')
+      ),
       'caching' => true,
-      'cachePerUser' => false
+      'cachePerUser' => false,
+      'cacheTimeout' => 300
     );
-    $r = \report_helper::freeform_report($options);
+    $r = \report_helper::report_download_link($options);
+    $r .= '<br/>' . \report_helper::report_grid($options);
     // Correct default paths for D8 since we are outside the iform module.
     global $indicia_theme_path;
     $indicia_theme_path = iform_media_folder_path() . 'themes/';

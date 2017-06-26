@@ -64,12 +64,12 @@
       set navbar_classes = [
         'navbar',
         theme.settings.navbar_inverse ? 'navbar-inverse' : 'navbar-default',
-        theme.settings.navbar_position ? 'navbar-' ~ theme.settings.navbar_position|clean_class : container,
+        theme.settings.navbar_position ? 'navbar-' ~ theme.settings.navbar_position|clean_class : 'container-fluid',
       ]
     %}
-    <header{{ navbar_attributes.addClass(navbar_classes) }} id="navbar" role="banner">
-      {% if not navbar_attributes.hasClass(container) %}
-        <div class="{{ container }}">
+    <header{{ navbar_attributes.addClass(navbar_classes) }} id="navbar" role="menubar">
+      {% if not navbar_attributes.hasClass('container-fluid') %}
+        <div class="container-fluid">
       {% endif %}
       <div class="navbar-header">
         {{ page.navigation }}
@@ -105,8 +105,19 @@
       {# Header #}
       {% if page.header %}
         {% block header %}
-          <div class="col-sm-12" role="heading">
+          <div class="col-sm-12" role="banner" id="banner">
             {{ page.header }}
+            <img src="{{ theme_path }}/images/headbg-frog.jpg" id="frog-image" class="pull-left" />
+            <img src="{{ theme_path }}/images/headbg.jpg" id="ns-title-image" />
+          </div>
+        {% endblock %}
+      {% endif %}
+
+      {# Menu bar #}
+      {% if page.menu %}
+        {% block menu %}
+          <div class="col-sm-12" role="menubar">
+            {{ page.menu }}
           </div>
         {% endblock %}
       {% endif %}

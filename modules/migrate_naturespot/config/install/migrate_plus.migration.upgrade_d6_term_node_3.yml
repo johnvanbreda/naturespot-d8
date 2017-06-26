@@ -3,9 +3,6 @@ langcode: en
 status: true
 dependencies: {  }
 id: upgrade_d6_term_node_3
-class: null
-field_plugin_method: null
-cck_plugin_method: null
 migration_tags:
   - 'Drupal 6'
 migration_group: migrate_drupal_6
@@ -16,8 +13,32 @@ source:
 process:
   nid:
     -
-      plugin: migration_lookup
-      migration: upgrade_d6_node
+      plugin: migration
+      migration:
+        - upgrade_d6_node_book
+        - upgrade_d6_node_event
+        - upgrade_d6_node_forum
+        - upgrade_d6_node_higher_taxon
+        - upgrade_d6_node_iform
+        - upgrade_d6_node_imagefield
+        - upgrade_d6_node_image_link
+        - upgrade_d6_node_long_answer
+        - upgrade_d6_node_matching
+        - upgrade_d6_node_multichoice
+        - upgrade_d6_node_page
+        - upgrade_d6_node_panel
+        - upgrade_d6_node_parish
+        - upgrade_d6_node_parish_story
+        - upgrade_d6_node_quiz
+        - upgrade_d6_node_quiz_directions
+        - upgrade_d6_node_scale
+        - upgrade_d6_node_short_answer
+        - upgrade_d6_node_simplenews
+        - upgrade_d6_node_species
+        - upgrade_d6_node_story
+        - upgrade_d6_node_taxon_group
+        - upgrade_d6_node_truefalse
+        - upgrade_d6_node_wild_place
       source: nid
     -
       plugin: skip_on_empty
@@ -30,28 +51,53 @@ migration_dependencies:
   required:
     0: upgrade_d6_vocabulary_entity_display
     1: upgrade_d6_vocabulary_entity_form_display
-    51: upgrade_d6_node_book
-    52: upgrade_d6_node_event
-    53: upgrade_d6_node_forum
-    54: upgrade_d6_node_higher_taxon
-    55: upgrade_d6_node_iform
-    56: upgrade_d6_node_imagefield
-    57: upgrade_d6_node_image_link
-    58: upgrade_d6_node_long_answer
-    59: upgrade_d6_node_matching
-    60: upgrade_d6_node_multichoice
-    61: upgrade_d6_node_page
-    62: upgrade_d6_node_panel
-    63: upgrade_d6_node_parish
-    64: upgrade_d6_node_parish_story
-    65: upgrade_d6_node_quiz
-    66: upgrade_d6_node_quiz_directions
-    67: upgrade_d6_node_scale
-    68: upgrade_d6_node_short_answer
-    69: upgrade_d6_node_simplenews
-    70: upgrade_d6_node_species
-    71: upgrade_d6_node_story
-    72: upgrade_d6_node_taxon_group
-    73: upgrade_d6_node_truefalse
-    74: upgrade_d6_node_wild_place
-  optional: {  }
+    49: upgrade_d6_node_book
+    50: upgrade_d6_node_event
+    51: upgrade_d6_node_forum
+    52: upgrade_d6_node_higher_taxon
+    53: upgrade_d6_node_iform
+    54: upgrade_d6_node_imagefield
+    55: upgrade_d6_node_image_link
+    56: upgrade_d6_node_long_answer
+    57: upgrade_d6_node_matching
+    58: upgrade_d6_node_multichoice
+    59: upgrade_d6_node_page
+    60: upgrade_d6_node_panel
+    61: upgrade_d6_node_parish
+    62: upgrade_d6_node_parish_story
+    63: upgrade_d6_node_quiz
+    64: upgrade_d6_node_quiz_directions
+    65: upgrade_d6_node_scale
+    66: upgrade_d6_node_short_answer
+    67: upgrade_d6_node_simplenews
+    68: upgrade_d6_node_species
+    69: upgrade_d6_node_story
+    70: upgrade_d6_node_taxon_group
+    71: upgrade_d6_node_truefalse
+    72: upgrade_d6_node_wild_place
+  optional:
+    - upgrade_d6_node_book
+    - upgrade_d6_node_event
+    - upgrade_d6_node_forum
+    - upgrade_d6_node_higher_taxon
+    - upgrade_d6_node_iform
+    - upgrade_d6_node_imagefield
+    - upgrade_d6_node_image_link
+    - upgrade_d6_node_long_answer
+    - upgrade_d6_node_matching
+    - upgrade_d6_node_multichoice
+    - upgrade_d6_node_page
+    - upgrade_d6_node_panel
+    - upgrade_d6_node_parish
+    - upgrade_d6_node_parish_story
+    - upgrade_d6_node_quiz
+    - upgrade_d6_node_quiz_directions
+    - upgrade_d6_node_scale
+    - upgrade_d6_node_short_answer
+    - upgrade_d6_node_simplenews
+    - upgrade_d6_node_species
+    - upgrade_d6_node_story
+    - upgrade_d6_node_taxon_group
+    - upgrade_d6_node_truefalse
+    - upgrade_d6_node_wild_place
+    - upgrade_d6_node

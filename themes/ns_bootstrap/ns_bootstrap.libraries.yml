@@ -17,3 +17,10 @@ bootstrap-scripts:
     bootstrap/assets/javascripts/bootstrap/scrollspy.js: {}
     bootstrap/assets/javascripts/bootstrap/tab.js: {}
     bootstrap/assets/javascripts/bootstrap/transition.js: {}
+
+ns-scripts:
+  version: 1.x
+  js:
+    js/ns_bootstrap.js: {}
+  dependencies:
+    - core/jquery

@@ -2,8 +2,10 @@
 
 namespace Drupal\naturespot_blocks\Plugin\Block;
 
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Config\ConfigDuplicateUUIDException;
+use Drupal\Core\Form;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Provides a map block for wild places.
@@ -19,56 +21,69 @@ class NsWildPlaceMapBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    iform_load_helpers(array('data_entry_helper', 'report_helper'));
-    $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
-    $js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/indicia.functions.js');
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/OpenLayers.js');
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/proj4js.js');
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/proj4defs.js');
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/jquery.indiciaMapPanel.js');
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/fancybox/jquery.fancybox.pack.js');
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/jquery.reportgrid.js');
-    drupal_set_html_head('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>');
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if (!$node) {
+      drupal_set_message('NsWildPlaceMapBlock must be placed on a parish or wild place node page');
+      return array();
+    }
+    iform_load_helpers(array('map_helper', 'report_helper'));
+    $config = \Drupal::config('iform.settings');
+    $readAuth = \map_helper::get_read_auth($config->get('website_id'), $config->get('password'));
     $options = array(
-      'presetLayers' => array('google_satellite'),
+      'presetLayers' => array('osm'),
       'editLayer' => false,
-      'jsPath'=>'/sites/all/modules/iform/media/js/',
+      'jsPath'=> base_path() . 'modules/iform/media/js/',
       'initial_lat'=>52.67721,
       'initial_long'=>-1.08765,
       'initial_zoom'=>9,
-      'width'=>415,
+      'width'=>'100%',
       'height'=>350
     );
-    $olOptions=array('theme'=>'/sites/all/modules/iform/media/js/theme/default/style.css');
-    echo data_entry_helper::map_panel($options, $olOptions);
-    echo report_helper::report_map(array(
+    $olOptions=array('theme' => base_path() . 'modules/iform/media/js/theme/default/style.css');
+    $r = \map_helper::map_panel($options, $olOptions);
+    $siteName = $node->getTitle() . ($node->getType() === 'parish' ? ' CP' : '');
+    $r .= \report_helper::report_map(array(
       'readAuth' => $readAuth,
       'dataSource' => 'naturespot/site_boundary',
-      'extraParams' => array('site_name' => '%node:title'),
+      'extraParams' => array('site_name' => $siteName),
       'caching' => true,
       'cachePerUser' => false,
       'clickable'=>false
     ));
-    data_entry_helper::$required_resources=array();
-    echo data_entry_helper::dump_javascript();
+    \map_helper::$javascript .= <<<JS
+mapInitialisationHooks.push(function(div) {
+  var locations= new OpenLayers.Layer.WMS('Locations', 'http://warehouse1.indicia.org.uk:8080/geoserver/wms', { 
+      layers: 'naturespot:vw_locations', 
+      transparent: true,
+      styles:'site_boundary_red'
+  }, { 
+      singleTile: true, 
+      isBaseLayer: false, 
+      sphericalMercator: true, 
+      opacity: 0.5
+  });
+  div.map.addLayer(locations);
+});
+JS;
+    // Correct default paths for D8 since we are outside the iform module.
+    global $indicia_theme_path;
+    $indicia_theme_path = iform_media_folder_path() . 'themes/';
     return array(
-      '#markup' => <<<CODE
-<p><a class="twitter-timeline" href="https://twitter.com/Nature_Spot">Tweets by @Nature_Spot</a></p>
-<!--
-
-Note we can limit width/height or number of tweets but not both!!
-
-Limit to 3 tweets:
-<p><a class="twitter-timeline" href="https://twitter.com/Nature_Spot" data-widget-id="719598821441937409" data-tweet-limit="3" width="400" height="300">Tweets by @Nature_Spot</a></p>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-Allow height limit to apply:
-<p><a class="twitter-timeline" href="https://twitter.com/Nature_Spot" data-widget-id="719598821441937409" width="400" height="450">Tweets by @Nature_Spot</a></p>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
--->
-CODE
+      '#markup' => SafeMarkup::format($r, array()),
+      '#cache' => [
+        'max-age' => 0, // no cache please
+      ],
+      '#attached' => array(
+        'library' => array(
+          'iform/base',
+          'iform/indiciaFns',
+          'iform/openlayers',
+          'iform/indiciaMapPanel',
+          'iform/fancybox',
+          'iform/reportgrid',
+          //'iform/googlemaps'
+        )
+      ),
     );
   }
 

@@ -22,9 +22,9 @@
 {% if title %}
   <h3>{{ title }}</h3>
 {% endif %}
-<select id="jump-menu--wild-places">
+<select id="jump-menu--parishes" class="jump-menu">
   {% for row in rows %}
     {{ row.content }}
   {% endfor %}
 </select>
-<button id="jump-menu--wild-places--go">Go</button>
+<button id="jump-menu--parishes--go">Go</button>

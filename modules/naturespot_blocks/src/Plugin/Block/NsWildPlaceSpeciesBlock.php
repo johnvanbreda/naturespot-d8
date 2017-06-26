@@ -7,14 +7,14 @@ use Drupal\Core\Form;
 use Drupal\Component\Utility\SafeMarkup;
 
 /**
- * Provides a map block for wild places.
+ * Provides a species list block for wild places.
  *
  * @Block(
- *   id = "ns_wild_place_latest_image_block",
- *   admin_label = @Translation("NatureSpot wild place latest_image block"),
+ *   id = "ns_wild_place_species_block",
+ *   admin_label = @Translation("NatureSpot wild place species block"),
  * )
  */
-class NsWildPlaceLatestImageBlock extends BlockBase {
+class NsWildPlaceSpeciesBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -28,42 +28,38 @@ class NsWildPlaceLatestImageBlock extends BlockBase {
     iform_load_helpers(array('report_helper'));
     $config = \Drupal::config('iform.settings');
     $readAuth = \report_helper::get_read_auth($config->get('website_id'), $config->get('password'));
-    $params = array('month'=>0, 'taxon_group'=>'all','site_name'=>$node->getTitle() . ' CP', 'limit'=>1);
-    $template = <<<HTML
-<li>
-  <div>
-    <a class="colorbox" href="http://warehouse1.indicia.org.uk/upload/{image_path}" title="{common} {taxon}, {recorder}, {date}">
-      <img width="220" src="http://warehouse1.indicia.org.uk/upload/med-{image_path}" alt="{common} {taxon}"/>
-    </a>
-    <div class="panel-region-separator">&nbsp;</div>
-    <strong><a href="{rootFolder}species_by_key?key={external_key}">Learn more about<br/>{common} <em>{taxon}</em></a><br/>
-    {recorder}</strong><br/>
-    {image_caption}<br/>
-  </div>
-</li>
-HTML;
-
+    $siteName = $node->getTitle() . ($node->getType() === 'parish' ? ' CP' : '');
+    $params = array('site_name'=>$siteName);
+    $loggedIn = \Drupal::currentUser()->id() > 0;
     $options=array(
-      'id'=>'latest-images',
-      'dataSource' => 'naturespot/images_by_site',
+      'id'=>'species-list',
+      'dataSource' => 'naturespot/species_by_site',
       'mode' => 'report',
       'readAuth' => $readAuth,
-      'includeAllColumns'=>false,
-      'header' => '<div class="item-list"><ul>',
-      'bands'=>array(
-        array (
-          'content'=>$template
-        )
-      ),
-      'footer' => '</ul></div>',
-      'itemsPerPage' => 1,
-      'autoParamsForm'=>false,
+      'includeAllColumns' => false,
+      'columns'=>array(
+        array('display'=>'Group', 'fieldname'=>'taxon_group'),
+        array ('fieldname'=>'common', 'display'=>'Common Name', 'template'=>'<a href="{rootFolder}species_by_key?key={external_key}">{common}</a>'),
+        array ('fieldname'=>'taxon', 'display'=>'Latin Name', 'template'=>'<a href="{rootFolder}species_by_key?key={external_key}"><em>{taxon}</em></a>'),
+        array('display'=>'Last Seen', 'fieldname'=>'date')
+      ) ,
+      'autoParamsForm'=>true,
       'extraParams'=>$params,
-      'class' => 'species-gallery',
-      'caching' => true,
-      'cachePerUser' => false
+      'itemsPerPage' => 30,
+      'paramDefaults'=>array('taxon_group_id'=>'','date_from'=>'','date_to'=>''),
+      'pager' => $loggedIn,
+      'forceNoFilterRow'=>!$loggedIn
     );
-    $r = \report_helper::freeform_report($options);
+    $r = '';
+    if ($loggedIn)
+      $r = '<br/>' . \report_helper::report_download_link($options);
+    else {
+      // not logged in so limit to 1 page
+      $options['extraParams']['limit'] = 30;
+      $options['itemsPerPage'] = 30;
+    }
+    $r .= '<br/>' . \report_helper::report_grid($options);
+
     // Correct default paths for D8 since we are outside the iform module.
     global $indicia_theme_path;
     $indicia_theme_path = iform_media_folder_path() . 'themes/';

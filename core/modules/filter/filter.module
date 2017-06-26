@@ -792,6 +792,7 @@ function _filter_html_image_secure_process($text) {
         continue;
       }
     }
+    drupal_set_message(Unicode::substr($src, 0, $base_path_length) . ' :: ' . $base_path);
     // Allow modules and themes to replace an invalid image with an error
     // indicator. See filter_filter_secure_image_alter().
     \Drupal::moduleHandler()->alter('filter_secure_image', $image);

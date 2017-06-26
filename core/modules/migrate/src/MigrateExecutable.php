@@ -209,6 +209,12 @@ class MigrateExecutable implements MigrateExecutableInterface {
         $save = FALSE;
       }
       catch (MigrateSkipRowException $e) {
+        $trace = $e->getTrace();
+        for ($i=0; $i<5; $i++) {
+          $row = $trace[$i];
+          echo "$row[file] : $row[line]\r\n";
+        }
+        throw $e;
         if ($e->getSaveToMap()) {
           $id_map->saveIdMapping($row, [], MigrateIdMapInterface::STATUS_IGNORED);
         }

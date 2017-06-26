@@ -13,63 +13,28 @@
  */
 #}
 
-{{- settings['prefix']|raw -}}
-{% if settings.ow %}
-  {% if settings['ow-def-at'] %}
-    <{{ settings['ow-el'] }} {{ wrapper_attributes.mergeAttributes(attributes) }}>
-  {% elseif settings['ow-def-cl'] %}
-    <{{ settings['ow-el'] }} {{ wrapper_attributes.mergeAttributes(attribute_classes.offsetGet('class')) }}>
+{% for item in items %}
+  {% set value = item.content["#text"] %}
+  {% if value == "G" %}
+    {% set colour = "green" %}
+    {% set title = "Easily identified from a photo." %}
+  {% elseif value == "A" %}
+    {% set colour = "amber" %}
+    {% set title = "Identifiable from a photo with care." %}
+  {% elseif value == "R" %}
+    {% set colour = "red" %}
+    {% set title = "Cannot usually be identified from a photo." %}
   {% else %}
-    <{{ settings['ow-el'] }} {{ wrapper_attributes }}>
-  {% endif %}
-    {{ _self.field(items, settings, label, content_attributes, field_item_wrapper_attributes, field_wrapper_attributes, label_attributes, label_hidden, element) }}
-    </{{ settings['ow-el'] }}>
-{% else %}
-  {{ _self.field(items, settings, label, content_attributes, field_item_wrapper_attributes, field_wrapper_attributes, label_attributes, label_hidden, element) }}
-{% endif %}
-{{- settings['suffix']|raw -}}
-
-{% macro field(items, settings, label, content_attributes, field_item_wrapper_attributes, field_wrapper_attributes, label_attributes, label_hidden, element) %}
-  {% if not label_hidden %}
-    {%
-      set title_classes = [
-        'field-label-' ~ element['#label_display']|clean_class,
-      ]
-    %}
-    {%- if settings['lbw-def-at'] -%}
-      <{{ settings['lbw-el']|default('div') }} {{ label_attributes.addClass(title_classes).mergeAttributes(title_attributes) }}>
-    {%- else -%}
-      <{{ settings['lbw-el']|default('div') }} {{ label_attributes.addClass(title_classes) }}>
-    {%- endif -%}
-        {{- label -}}{%- if settings['lb-col'] -%}:{%- endif -%}
-      </{{ settings['lbw-el']|default('div') }}>
-  {% endif %}
-
-  {% if settings.fis %}
-    {% if settings['fis-def-at'] %}
-      <{{ settings['fis-el'] }} {{ field_wrapper_attributes.mergeAttributes(content_attributes) }}>
-    {% else %}
-      <{{ settings['fis-el'] }} {{ field_wrapper_attributes }}>
-    {% endif %}
-        {{ _self.content(items, settings, field_item_wrapper_attributes, content_attributes) }}
-      </{{ settings['fis-el'] }}>
-  {% else %}
-    {{ _self.content(items, settings, field_item_wrapper_attributes) }}
-  {% endif %}
-{% endmacro %}
-
-{% macro content(items, settings, field_item_wrapper_attributes, content_attributes) %}
-  {% for item in items %}
-    {% if settings.fi %}
-      {% if settings['fi-def-at'] %}
-        <{{ settings['fi-el'] }} {{ field_item_wrapper_attributes.mergeAttributes(item.attributes) }} >
-      {% else %}
-        <{{ settings['fi-el'] }} {{ field_item_wrapper_attributes }} >
-      {% endif %}
-          {{- item.content -}} 2
-        </{{ settings['fi-el'] }}>
-    {% else %}
-      {{ item.content }} 3
-    {% endif %}
-  {% endfor %}
-{% endmacro %}
+    {% set colour = value %}
+    {% set title = "Unknown" %}
+  {%  endif %}
+  <div class="field row">
+    <div class="col-md-3 field-label-inline">{{ label }}</div>
+    <div class="col-md-9">
+      <a href="{{ url('<front>') }}content/photo-identification">
+        <img src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" width="32" height="20"
+             title="{{ title }} Click for more info." />
+      </a>
+    </div>
+  </div>
+{%  endfor %}

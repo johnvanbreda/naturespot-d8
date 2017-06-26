@@ -22,13 +22,13 @@
   <div{{ attributes }}>
 {% endif %}
   {% if title %}
-    <h3>{{ title }}</h3>
+    <h2>{{ title }}</h2>
   {% endif %}
 
   <{{ list.type }}{{ list.attributes }}>
 
     {% for row in rows %}
-      <li{{ row.attributes }}>{{ row.content }}</li>
+      <li{{ row.attributes }}><div>{{ row.content }}</div></li>
     {% endfor %}
 
   </{{ list.type }}>

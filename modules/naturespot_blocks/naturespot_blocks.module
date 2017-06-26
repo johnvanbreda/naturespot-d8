@@ -1,0 +1,13 @@
+<?php
+
+function naturespot_blocks_views_data_alter(&$data)
+{
+  $data['node']['ns_species_gallery_filter'] = [
+    'title' => t('Species Gallery filter'),
+    'filter' => [
+      'title' => t('Species Gallery filter'),
+      'help' => 'filters output of gallery with caterpillar/gall logic',
+      'id' => 'ns_species_gallery_filter',
+    ]
+  ];
+}

@@ -32,7 +32,7 @@
  * @ingroup themeable
  */
 #}
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>{{ 'Forum'|t }}</th>
@@ -43,7 +43,7 @@
   </thead>
   <tbody>
   {% for child_id, forum in forums %}
-    <tr>
+    <tr{% if forum.is_container == true %} class="container-forum bg-primary"{% endif %}>
       <td{% if forum.is_container == true %} colspan="4"{% endif %}>
         {#
           Enclose the contents of this cell with X divs, where X is the

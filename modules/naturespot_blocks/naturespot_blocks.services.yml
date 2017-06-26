@@ -1,5 +1,9 @@
 services:
-  twig_tweak.twig_extension:
-    class: Drupal\twig_tweak\TwigExtension
+  naturespot_blocks.twig_extension:
+    class: Drupal\naturespot_blocks\NSTwigExtension
     tags:
       - { name: twig.extension }
+  naturespot_blocks.breadcrumb_taxonomy:
+    class: Drupal\naturespot_blocks\Breadcrumb\TaxonomyBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }

@@ -1,0 +1,149 @@
+// NatureSpot theme specifics
+
+$gap: 8px;
+$page-colour: #eee;
+$alert-colour: #FF7777;
+$dark-outline: grey;
+$heading-background-colour: #b9dfcf;
+$menu-background-colour: #dddddd;
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin shadow() {
+  -webkit-box-shadow: 2px 2px 4px silver;
+  -moz-box-shadow: 2px 2px 4px silver;
+  box-shadow: 2px 2px 4px silver;
+}
+
+@mixin solid-heading() {
+  background: $heading-background-colour;
+  padding: $gap / 2;
+}
+
+@mixin image-panel() {
+  border: solid $dark-outline 1px;
+  background-color: #ffffff;
+  @include border-radius(4px);
+  @include shadow;
+  padding: 2px;
+  text-align: center;
+}
+
+@import 'ns-components/reports';
+@import 'ns-components/views';
+@import 'ns-components/places';
+@import 'ns-components/species';
+@import 'ns-components/jump-menus';
+@import 'ns-components/forums';
+
+/** Bootstrap tweaks */
+.row-no-padding {
+  padding: 0 $gap;
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+.tab-content {
+  padding-top: $gap;
+}
+
+/* General HTML */
+h1 {
+  font-size: 25px;
+}
+
+h2 {
+  font-size: 20px;
+  @include solid-heading;
+}
+
+.container {
+  background-color: $page-colour;
+}
+
+header#navbar {
+  min-height: 30px;
+  #block-secondarylinks {
+    .navbar-nav > li > a {
+      padding: $gap - 2 $gap;
+      font-size: 13px;
+    }
+    .dropdown-menu > li {
+      float: none;
+    }
+  }
+}
+#banner {
+  background: #7a9842;
+  padding: 0;
+  margin-bottom: $gap;
+  .region-header {
+    display: none;
+  }
+  #frog-image {
+    display: none;
+  }
+  #ns-title-image {
+    /* Centre the title */
+    margin: auto;
+    display: block;
+  }
+}
+@media (min-width: $screen-lg-min) {
+  #banner {
+    #frog-image {
+      display: inline;
+    }
+    #ns-title-image {
+      /* Right align the title */
+      margin: 0;
+      display: inline;
+      float: right !important;
+    }
+  }
+}
+@media (max-width: 560px) {
+  #banner {
+    #ns-title-image {
+      width: 100%;
+    }
+  }
+}
+#block-ns-bootstrap-main-menu {
+  ul {
+    clear: left;
+    width: 100%;
+    background-color: $menu-background-colour;
+    @include border-radius(4px);
+    margin-bottom: $gap;
+  }
+}
+div.main-container {
+  padding-bottom: $gap;
+}
+#block-speciesnavigation {
+  a {
+    padding: $gap / 4 0 $gap / 4 8px;
+  }
+}
+
+/* Show BSBI link block only on plant pages */
+.field--name-dynamic-block-fieldtaxonomy-term-bsbi-link {
+  display: none;
+}
+
+.field--name-dynamic-block-fieldtaxonomy-term-bsbi-link {
+  display: block;
+}
+
+iframe.map-frame {
+  @include image-panel;
+
+}

@@ -1,0 +1,68 @@
+species_page:
+  label: Species page
+  category: NatureSpot
+  template: templates/species-page
+  regions:
+    title:
+      label: Title
+    latin:
+      label: Latin
+    tab1:
+      label: Tab 1
+    tab1bottomleft:
+      label: Tab 1 bottom left
+    tab1bottomright:
+      label: Tab 1 bottom right
+    tab2:
+      label: Tab 2
+wild_place:
+  label: Wild place
+  category: NatureSpot
+  template: templates/wild-place
+  regions:
+    top:
+      label: Top
+    tab1top:
+      label: tab1top
+    tab1col1:
+      label: Tab 1 col 1
+    tab1col2:
+      label: Tab 1 col 2
+    tab1bottom:
+      label: tab1bottom
+    tab2:
+      label: Tab 2
+    tab3:
+      label: Tab 3
+parish:
+  label: Parish
+  category: NatureSpot
+  template: templates/parish
+  regions:
+    top:
+      label: Top
+    tab1top:
+      label: tab1top
+    tab1col1:
+      label: Tab 1 col 1
+    tab1col2:
+      label: Tab 1 col 2
+    tab1col3:
+      label: Tab 1 col 3
+    tab1bottom:
+      label: tab1bottom
+    tab2:
+      label: Tab 2
+    tab3:
+      label: Tab 3
+    tab4:
+      label: Tab 4
+user_league:
+  label: User league
+  category: NatureSpot
+  template: templates/user-league
+  regions:
+    tab1:
+      label: Tab 1
+    tab2:
+      label: Tab 2

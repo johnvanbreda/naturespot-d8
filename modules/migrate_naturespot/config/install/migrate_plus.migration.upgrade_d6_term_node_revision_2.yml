@@ -3,9 +3,6 @@ langcode: en
 status: true
 dependencies: {  }
 id: upgrade_d6_term_node_revision_2
-class: null
-field_plugin_method: null
-cck_plugin_method: null
 migration_tags:
   - 'Drupal 6'
 migration_group: migrate_drupal_6
@@ -16,8 +13,32 @@ source:
 process:
   vid:
     -
-      plugin: migration_lookup
-      migration: upgrade_d6_node
+      plugin: migration
+      migration:
+        - upgrade_d6_node_book
+        - upgrade_d6_node_event
+        - upgrade_d6_node_forum
+        - upgrade_d6_node_higher_taxon
+        - upgrade_d6_node_iform
+        - upgrade_d6_node_imagefield
+        - upgrade_d6_node_image_link
+        - upgrade_d6_node_long_answer
+        - upgrade_d6_node_matching
+        - upgrade_d6_node_multichoice
+        - upgrade_d6_node_page
+        - upgrade_d6_node_panel
+        - upgrade_d6_node_parish
+        - upgrade_d6_node_parish_story
+        - upgrade_d6_node_quiz
+        - upgrade_d6_node_quiz_directions
+        - upgrade_d6_node_scale
+        - upgrade_d6_node_short_answer
+        - upgrade_d6_node_simplenews
+        - upgrade_d6_node_species
+        - upgrade_d6_node_story
+        - upgrade_d6_node_taxon_group
+        - upgrade_d6_node_truefalse
+        - upgrade_d6_node_wild_place
       source: vid
     -
       plugin: skip_on_empty
@@ -28,34 +49,59 @@ destination:
   plugin: 'entity_revision:node'
 migration_dependencies:
   required:
-    187: upgrade_d6_term_node_2
-    188: upgrade_d6_term_node_3
-    189: upgrade_d6_term_node_4
-    190: upgrade_d6_term_node_5
-    191: upgrade_d6_term_node_6
-    192: upgrade_d6_term_node_7
-    75: upgrade_d6_node_revision_book
-    76: upgrade_d6_node_revision_event
-    77: upgrade_d6_node_revision_forum
-    78: upgrade_d6_node_revision_higher_taxon
-    79: upgrade_d6_node_revision_iform
-    80: upgrade_d6_node_revision_imagefield
-    81: upgrade_d6_node_revision_image_link
-    82: upgrade_d6_node_revision_long_answer
-    83: upgrade_d6_node_revision_matching
-    84: upgrade_d6_node_revision_multichoice
-    85: upgrade_d6_node_revision_page
-    86: upgrade_d6_node_revision_panel
-    87: upgrade_d6_node_revision_parish
-    88: upgrade_d6_node_revision_parish_story
-    89: upgrade_d6_node_revision_quiz
-    90: upgrade_d6_node_revision_quiz_directions
-    91: upgrade_d6_node_revision_scale
-    92: upgrade_d6_node_revision_short_answer
-    93: upgrade_d6_node_revision_simplenews
-    94: upgrade_d6_node_revision_species
-    95: upgrade_d6_node_revision_story
-    96: upgrade_d6_node_revision_taxon_group
-    97: upgrade_d6_node_revision_truefalse
-    98: upgrade_d6_node_revision_wild_place
-  optional: {  }
+    184: upgrade_d6_term_node_2
+    185: upgrade_d6_term_node_3
+    186: upgrade_d6_term_node_4
+    187: upgrade_d6_term_node_5
+    188: upgrade_d6_term_node_6
+    189: upgrade_d6_term_node_7
+    73: upgrade_d6_node_revision_book
+    74: upgrade_d6_node_revision_event
+    75: upgrade_d6_node_revision_forum
+    76: upgrade_d6_node_revision_higher_taxon
+    77: upgrade_d6_node_revision_iform
+    78: upgrade_d6_node_revision_imagefield
+    79: upgrade_d6_node_revision_image_link
+    80: upgrade_d6_node_revision_long_answer
+    81: upgrade_d6_node_revision_matching
+    82: upgrade_d6_node_revision_multichoice
+    83: upgrade_d6_node_revision_page
+    84: upgrade_d6_node_revision_panel
+    85: upgrade_d6_node_revision_parish
+    86: upgrade_d6_node_revision_parish_story
+    87: upgrade_d6_node_revision_quiz
+    88: upgrade_d6_node_revision_quiz_directions
+    89: upgrade_d6_node_revision_scale
+    90: upgrade_d6_node_revision_short_answer
+    91: upgrade_d6_node_revision_simplenews
+    92: upgrade_d6_node_revision_species
+    93: upgrade_d6_node_revision_story
+    94: upgrade_d6_node_revision_taxon_group
+    95: upgrade_d6_node_revision_truefalse
+    96: upgrade_d6_node_revision_wild_place
+  optional:
+    - upgrade_d6_node_book
+    - upgrade_d6_node_event
+    - upgrade_d6_node_forum
+    - upgrade_d6_node_higher_taxon
+    - upgrade_d6_node_iform
+    - upgrade_d6_node_imagefield
+    - upgrade_d6_node_image_link
+    - upgrade_d6_node_long_answer
+    - upgrade_d6_node_matching
+    - upgrade_d6_node_multichoice
+    - upgrade_d6_node_page
+    - upgrade_d6_node_panel
+    - upgrade_d6_node_parish
+    - upgrade_d6_node_parish_story
+    - upgrade_d6_node_quiz
+    - upgrade_d6_node_quiz_directions
+    - upgrade_d6_node_scale
+    - upgrade_d6_node_short_answer
+    - upgrade_d6_node_simplenews
+    - upgrade_d6_node_species
+    - upgrade_d6_node_story
+    - upgrade_d6_node_taxon_group
+    - upgrade_d6_node_truefalse
+    - upgrade_d6_node_wild_place
+    - upgrade_d6_node

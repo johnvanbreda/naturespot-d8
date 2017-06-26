@@ -4,16 +4,17 @@ namespace Drupal\naturespot_blocks\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Provides a map block for wild places.
  *
  * @Block(
- *   id = "ns_wild_place_map_block",
- *   admin_label = @Translation("NatureSpot wild place map block"),
+ *   id = "ns_wild_place_latest_image_block",
+ *   admin_label = @Translation("NatureSpot wild place latest_image block"),
  * )
  */
-class NsWildPlaceMapBlock extends BlockBase {
+class NsWildPlaceLatestImageBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -21,53 +22,67 @@ class NsWildPlaceMapBlock extends BlockBase {
   public function build() {
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node) {
-      drupal_set_message('NsWildPlaceMapBlock must be placed on a parish or wild place node page');
+      drupal_set_message('NsWildPlaceLatestImageBlock must be placed on a parish or wild place node page');
       return array();
     }
-    iform_load_helpers(array('map_helper', 'report_helper'));
+    iform_load_helpers(array('report_helper'));
     $config = \Drupal::config('iform.settings');
-    $readAuth = \map_helper::get_read_auth($config->get('website_id'), $config->get('password'));
-    $options = array(
-      'presetLayers' => array('google_satellite'),
-      'editLayer' => false,
-      'jsPath'=>'/sites/all/modules/iform/media/js/',
-      'initial_lat'=>52.67721,
-      'initial_long'=>-1.08765,
-      'initial_zoom'=>9,
-      'width'=>415,
-      'height'=>350
-    );
-    $olOptions=array('theme'=>'/sites/all/modules/iform/media/js/theme/default/style.css');
-    $r = \map_helper::map_panel($options, $olOptions);
-    $r .= \report_helper::report_map(array(
+    $readAuth = \report_helper::get_read_auth($config->get('website_id'), $config->get('password'));
+    $siteName = $node->getTitle() . ($node->getType() === 'parish' ? ' CP' : '');
+    $params = array('month'=>0, 'taxon_group'=>'all','site_name'=>$siteName, 'limit'=>1);
+    $template = <<<HTML
+<li>
+  <div>
+    <a class="colorbox" href="http://warehouse1.indicia.org.uk/upload/{image_path}" title="{common} {taxon}, {recorder}, {date}">
+      <img width="220" src="http://warehouse1.indicia.org.uk/upload/med-{image_path}" alt="{common} {taxon}"/>
+    </a>
+    <div class="panel-region-separator">&nbsp;</div>
+    <strong><a href="{rootFolder}species_by_key?key={external_key}">Learn more about<br/>{common} <em>{taxon}</em></a><br/>
+    {recorder}</strong><br/>
+    {image_caption}<br/>
+  </div>
+</li>
+HTML;
+
+    $options=array(
+      'id'=>'latest-images',
+      'dataSource' => 'naturespot/images_by_site',
+      'mode' => 'report',
       'readAuth' => $readAuth,
-      'dataSource' => 'naturespot/site_boundary',
-      'extraParams' => array('site_name' => $node->field_parish->value),
+      'includeAllColumns'=>false,
+      'header' => '<div class="item-list"><ul>',
+      'bands'=>array(
+        array (
+          'content'=>$template
+        )
+      ),
+      'footer' => '</ul></div>',
+      'itemsPerPage' => 1,
+      'autoParamsForm'=>false,
+      'extraParams'=>$params,
+      'class' => 'species-gallery',
       'caching' => true,
-      'cachePerUser' => false,
-      'clickable'=>false
-    ));
-
-    $script = \helper_base::get_scripts(\helper_base::$javascript, \helper_base::$late_javascript,
-      \helper_base::$onload_javascript, FALSE, TRUE);
-
-    \map_helper::$required_resources=array();
-    \map_helper::dump_javascript();
+      'cachePerUser' => false
+    );
+    $r = \report_helper::freeform_report($options);
+    // Correct default paths for D8 since we are outside the iform module.
+    global $indicia_theme_path;
+    $indicia_theme_path = iform_media_folder_path() . 'themes/';
     return array(
-      '#markup' => '<div id="map" style="width: 415px; height: 350px;"></div>',
+      '#markup' => SafeMarkup::format($r, array()),
+      '#cache' => [
+        'max-age' => 0, // no cache please
+      ],
       '#attached' => array(
         'library' => array(
           'iform/base',
           'iform/indiciaFns',
-          'iform/openlayers',
-          'iform/indiciaMapPanel',
           'iform/fancybox',
-          'iform/reportgrid',
-          'iform/googlemaps',
-          'naturespot_blocks/nswildplacemapblock'
+          'iform/reportgrid'
         )
       ),
     );
+
   }
 
 }
