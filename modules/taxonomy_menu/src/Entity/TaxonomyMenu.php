@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\taxonomy_menu\Entity\TaxonomyMenu.
- */
-
 namespace Drupal\taxonomy_menu\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
@@ -154,7 +149,6 @@ class TaxonomyMenu extends ConfigEntityBase implements TaxonomyMenuInterface {
     parent::delete();
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -241,6 +235,7 @@ class TaxonomyMenu extends ConfigEntityBase implements TaxonomyMenuInterface {
     $link += array(
       'id' => $this->buildMenuPluginId($term),
       'title' => $term->label(),
+      'weight' => $term->getWeight(),
       'description' => $term->getDescription(),
       'menu_name' => $menu_id,
       'expanded' => $this->expanded,
