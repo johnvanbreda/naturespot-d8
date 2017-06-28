@@ -1,0 +1,7 @@
+naturespot_blocks.specis_by_key:
+  path: 'species_by_key'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::speciesByKey'
+    _title: 'Species by key'
+  requirements:
+    _permission: 'access content'

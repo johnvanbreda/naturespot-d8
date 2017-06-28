@@ -1,0 +1,15 @@
+name: Pathologic Test
+description: Module which implements hook_pathologic_alter() for testing that functionality.
+# core: 8.x
+package: Testing
+dependencies:
+- filter
+- pathologic
+type: module
+hidden: true
+
+# Information added by Drupal.org packaging script on 2017-05-14
+version: '8.x-1.x-dev'
+core: '8.x'
+project: 'pathologic'
+datestamp: 1494721388
