@@ -1,0 +1,20 @@
+.bs-region--right {
+  font-size: 90%;
+  > .field {
+    margin: $gap 0;
+    padding: $gap 0;
+    border-bottom: 1px solid $light-outline;
+    &.field--name-dynamic-block-fieldnode-follow-us p {
+      font-size: 0; /* prevent whitespace breaking layout */
+      a {
+        width: 33%;
+      }
+    }
+  }
+}
+.field--name-dynamic-block-fieldnode-partners {
+  margin-top: $gap;
+  img {
+    width: 75%;
+  }
+}

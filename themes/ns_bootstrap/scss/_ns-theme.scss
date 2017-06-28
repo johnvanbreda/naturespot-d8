@@ -4,6 +4,7 @@ $gap: 8px;
 $page-colour: #eee;
 $alert-colour: #FF7777;
 $dark-outline: grey;
+$light-outline: silver;
 $heading-background-colour: #b9dfcf;
 $menu-background-colour: #dddddd;
 
@@ -40,6 +41,7 @@ $menu-background-colour: #dddddd;
 @import 'ns-components/species';
 @import 'ns-components/jump-menus';
 @import 'ns-components/forums';
+@import 'ns-components/home';
 
 /** Bootstrap tweaks */
 .row-no-padding {
@@ -96,6 +98,9 @@ header#navbar {
     display: block;
   }
 }
+#block-ns-bootstrap-main-menu {
+  font-size: 16px;
+}
 @media (min-width: $screen-lg-min) {
   #banner {
     #frog-image {
@@ -145,5 +150,4 @@ div.main-container {
 
 iframe.map-frame {
   @include image-panel;
-
 }
