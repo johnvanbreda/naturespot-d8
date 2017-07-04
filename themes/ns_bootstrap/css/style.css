@@ -6504,6 +6504,9 @@ table.report-grid {
   .field--name-dynamic-block-fieldnode-partners img {
     width: 75%; }
 
+#ctrl-wrap-wild_place_hidden {
+  display: none; }
+
 /** Bootstrap tweaks */
 .row-no-padding {
   padding: 0 8px; }
@@ -6534,7 +6537,7 @@ header#navbar {
     padding: 6px 8px;
     font-size: 12px;
     color: #eee; }
-  header#navbar #block-secondarylinks .navbar-nav > li.active a {
+  header#navbar #block-secondarylinks .navbar-nav > li.active a, header#navbar #block-secondarylinks .navbar-nav > li.open a {
     background-color: #444444; }
   header#navbar #block-secondarylinks .dropdown-menu > li {
     float: none; }

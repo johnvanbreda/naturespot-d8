@@ -1,5 +1,7 @@
 <?php
 
+define('NS_GRANT_ALL', 51);
+
 function naturespot_blocks_views_data_alter(&$data)
 {
   $data['node']['ns_species_gallery_filter'] = [
@@ -10,4 +12,51 @@ function naturespot_blocks_views_data_alter(&$data)
       'id' => 'ns_species_gallery_filter',
     ]
   ];
+}
+
+function naturespot_blocks_form_user_login_form_alter(&$form, $form_state) {
+  // Alter login form and add own custom submit handler.
+  $form['#submit'][] = '_naturespot_blocks_user_login_form_submit';
+}
+
+/**
+ * Custom submit handler for login form.
+ */
+function _naturespot_blocks_user_login_form_submit($form, $form_state) {
+  $form_state->setRedirect('<front>');
+}
+
+function naturespot_blocks_node_grants(\Drupal\Core\Session\AccountInterface $account, $op) {
+  $grants = array();
+  if ($account->hasPermission('view ns admin page'))
+    $grants['ns_admin_page_access'] = NS_GRANT_ALL;
+  return $grants;
+}
+
+/**
+ * Implements hook_node_access_records.
+ * Returns grants required to access a particular iform node.
+ * @param \Drupal\node\NodeInterface $node
+ * @return array
+ */
+function naturespot_blocks_node_access_records(\Drupal\node\NodeInterface $node) {
+  $grants = array();
+  $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$node->id());
+  $adminPages = array(
+    '/content/manual',
+    '/content/log-details',
+    '/import-instructions',
+    '/all-species-view',
+    '/content/whos-who'
+  );
+  if (in_array($alias, $adminPages)) {
+    $grants[] = array(
+      'realm' => 'ns_admin_page_access',
+      'gid' => NS_GRANT_ALL,
+      'grant_view' => 1,
+      'grant_update' => 1,
+      'grant_delete' => 1
+    );
+  }
+  return $grants;
 }

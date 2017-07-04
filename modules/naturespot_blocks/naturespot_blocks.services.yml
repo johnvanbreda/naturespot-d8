@@ -3,6 +3,7 @@ services:
     class: Drupal\naturespot_blocks\NSTwigExtension
     tags:
       - { name: twig.extension }
+
   naturespot_blocks.breadcrumb_taxonomy:
     class: Drupal\naturespot_blocks\Breadcrumb\TaxonomyBreadcrumbBuilder
     tags:

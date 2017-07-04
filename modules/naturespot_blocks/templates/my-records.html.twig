@@ -1,33 +1,39 @@
-{{ content.top }}
-<br/>
-{{ drupal_plugin_block('ns_my_records_params_block', false) }}
-<br/>
-<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#tab1">User records league</a></li>
-  <li><a data-toggle="tab" href="#tab2">Images in library</a></li>
-</ul>
+{% if user.hasPermission('logged in') %}
+  {{ content.top }}
+  <br/>
+  {{ drupal_plugin_block('ns_my_records_params_block', false) }}
+  <br/>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#tab1">User records league</a></li>
+    <li><a data-toggle="tab" href="#tab2">Images in library</a></li>
+  </ul>
 
-<div class="tab-content">
-  <div id="tab1" class="tab-pane fade in active">
-    <div class="row">
-      <div class="col-md-6">
-        {{ content.tab1left }}
-        {{ drupal_plugin_block('ns_my_year_on_year_block', false) }}
+  <div class="tab-content">
+    <div id="tab1" class="tab-pane fade in active">
+      <div class="row">
+        <div class="col-md-6">
+          {{ content.tab1left }}
+          {{ drupal_plugin_block('ns_my_year_on_year_block', false) }}
+        </div>
+        <div class="col-md-6">
+          {{ drupal_plugin_block('ns_my_contribution_summary_block', false) }}
+          {{ content.tab1right }}
+        </div>
       </div>
-      <div class="col-md-6">
-        {{ drupal_plugin_block('ns_my_contribution_summary_block', false) }}
-        {{ content.tab1right }}
+      <div class="row">
+        <div class="col-md-12">
+          {{ content.tab1bottom }}
+          {{ drupal_plugin_block('ns_my_records_block', false) }}
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        {{ content.tab1bottom }}
-        {{ drupal_plugin_block('ns_my_records_block', false) }}
-      </div>
+    <div id="tab2" class="tab-pane fade">
+      {{ content.tab2 }}
+      {{ drupal_plugin_block('ns_my_species_block', false) }}
     </div>
   </div>
-  <div id="tab2" class="tab-pane fade">
-    {{ content.tab2 }}
-    {{ drupal_plugin_block('ns_my_species_block', false) }}
-  </div>
-</div>
+{% else %}
+  <p>Before you can keep a list of your own records on NatureSpot you must log in or
+    <a href="user/register">register.</a></p>
+  {{ drupal_plugin_block('user_login_block') }}
+{% endif %}

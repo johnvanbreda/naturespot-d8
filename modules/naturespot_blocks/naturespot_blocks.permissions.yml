@@ -1,0 +1,4 @@
+view ns admin page:
+  title: 'Access NatureSpot Admin pages'
+  description: 'Limit access to pages for NatureSpot admins.'
+  restrict access: TRUE

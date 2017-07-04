@@ -1,4 +1,4 @@
-naturespot_blocks.specis_by_key:
+naturespot_blocks.species_by_key:
   path: 'species_by_key'
   defaults:
     _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::speciesByKey'
