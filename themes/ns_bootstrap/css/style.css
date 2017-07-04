@@ -6357,7 +6357,20 @@ p:last-child,
 
 table.report-grid {
   width: 100%; }
+  table.report-grid .pager {
+    margin: 0; }
 
+#my-records-params .form-row {
+  padding-right: 32px; }
+  #my-records-params .form-row * {
+    vertical-align: middle; }
+#my-records-params input[type="submit"] {
+  display: inline-block; }
+
+@media (min-width: 992px) {
+  #my-records-params .form-row {
+    float: left;
+    width: 50%; } }
 /* Gallery views */
 .species-gallery .item-list ul {
   display: -ms-flexbox;
@@ -6400,8 +6413,9 @@ table.report-grid {
       box-shadow: 2px 2px 4px silver;
       padding: 2px;
       text-align: center; }
-    .species-gallery .item-list ul li img {
-      height: 140px; }
+    .species-gallery .item-list ul li .views-field-field-file-name img {
+      height: 140px;
+      margin: auto; }
     .species-gallery .item-list ul li.confidence-Likely > div, .species-gallery .item-list ul li.confidence-Uncertain > div {
       border: solid #FF7777 1px;
       background-color: #ffdddd;
@@ -6412,10 +6426,12 @@ table.report-grid {
       opacity: 0.4; }
       .species-gallery .item-list ul li.status-Off:before {
         content: "Unpublished"; }
+    .species-gallery .item-list ul li .photo-id-icon {
+      margin-top: -24px; }
 
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  .species-gallery .item-list ul li img {
+  .species-gallery .item-list ul li .views-field-field-file-name img {
     height: 230px; } }
 .species-gallery.view-latest-image .item-list ul li {
   margin: 8px 0 0 0; }
@@ -6436,12 +6452,6 @@ table.report-grid {
   background: #b9dfcf;
   padding: 4px;
   margin: 8px 0; }
-.page-node-type-parish .field--name-body, .page-node-type-wild-place .field--name-body {
-  -webkit-box-shadow: 2px 2px 4px silver;
-  -moz-box-shadow: 2px 2px 4px silver;
-  box-shadow: 2px 2px 4px silver;
-  border: solid grey 1px;
-  padding: 8px; }
 .page-node-type-parish #map-container, .page-node-type-wild-place #map-container {
   margin: 8px 0; }
 .page-node-type-parish #latest-images tbody td > div, .page-node-type-wild-place #latest-images tbody td > div {
@@ -6456,6 +6466,12 @@ table.report-grid {
   box-shadow: 2px 2px 4px silver;
   padding: 2px;
   text-align: center; }
+.page-node-type-parish .view-parish-latest-news, .page-node-type-wild-place .view-parish-latest-news {
+  -webkit-box-shadow: 2px 2px 4px silver;
+  -moz-box-shadow: 2px 2px 4px silver;
+  box-shadow: 2px 2px 4px silver;
+  border: solid grey 1px;
+  padding: 8px; }
 
 /* Species page */
 .page-node-type-species #tab1 div.field {
@@ -6480,7 +6496,8 @@ table.report-grid {
       font-size: 0;
       /* prevent whitespace breaking layout */ }
       .bs-region--right > .field.field--name-dynamic-block-fieldnode-follow-us p a {
-        width: 33%; }
+        width: 33%;
+        display: inline-block; }
 
 .field--name-dynamic-block-fieldnode-partners {
   margin-top: 8px; }
@@ -6510,10 +6527,15 @@ h2 {
   background-color: #eee; }
 
 header#navbar {
-  min-height: 30px; }
-  header#navbar #block-secondarylinks .navbar-nav > li > a {
+  min-height: 30px;
+  margin: 8px;
+  background-color: #333333; }
+  header#navbar #block-secondarylinks .navbar-nav > li a {
     padding: 6px 8px;
-    font-size: 13px; }
+    font-size: 12px;
+    color: #eee; }
+  header#navbar #block-secondarylinks .navbar-nav > li.active a {
+    background-color: #444444; }
   header#navbar #block-secondarylinks .dropdown-menu > li {
     float: none; }
 
@@ -6532,6 +6554,17 @@ header#navbar {
 
 #block-ns-bootstrap-main-menu {
   font-size: 16px; }
+  #block-ns-bootstrap-main-menu .container-fluid {
+    padding-bottom: 0;
+    background: #dddddd; }
+    #block-ns-bootstrap-main-menu .container-fluid ul {
+      clear: left;
+      width: 100%;
+      background: transparent;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -ms-border-radius: 4px;
+      border-radius: 4px; }
 
 @media (min-width: 1200px) {
   #banner #frog-image {
@@ -6544,16 +6577,6 @@ header#navbar {
 @media (max-width: 560px) {
   #banner #ns-title-image {
     width: 100%; } }
-#block-ns-bootstrap-main-menu ul {
-  clear: left;
-  width: 100%;
-  background-color: #dddddd;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  border-radius: 4px;
-  margin-bottom: 8px; }
-
 div.main-container {
   padding-bottom: 8px; }
 
@@ -6579,3 +6602,23 @@ iframe.map-frame {
   box-shadow: 2px 2px 4px silver;
   padding: 2px;
   text-align: center; }
+
+/* Some extra helpers */
+/* Add class="in-box" to create a nice frame around an element. */
+.in-box {
+  -webkit-box-shadow: 2px 2px 4px silver;
+  -moz-box-shadow: 2px 2px 4px silver;
+  box-shadow: 2px 2px 4px silver;
+  border: solid grey 1px;
+  padding: 8px; }
+
+/* Add class="full-width" to make an element occupy width of the parent container. */
+.full-width {
+  width: 100%; }
+
+.padded {
+  padding: 8px; }
+
+/* Tweaks to Bootstrap helpers */
+.bg-primary a {
+  color: white; }

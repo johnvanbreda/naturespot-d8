@@ -7,7 +7,7 @@ use Drupal\Core\Form;
 use Drupal\Component\Utility\SafeMarkup;
 
 /**
- * Provides a map block for wild places.
+ * Provides a species count block for wild places.
  *
  * @Block(
  *   id = "ns_wild_place_species_count_block",
@@ -41,8 +41,9 @@ class NsWildPlaceSpeciesCountBlock extends BlockBase {
       ),
       'mode'=>'report'
     ));
-    $r = '<p id="site-species-count">Total species seen at this site: ' .
-        $output[0]['species_count'] . '</p>';
+    $msg = $node->getType() === 'parish' ?
+      'Total species seen in this parish' : 'Total species seen at this site';
+    $r = "<p id=\"site-species-count\" class=\"in-box\">$msg: " . $output[0]['species_count'] . '</p>';
     // Correct default paths for D8 since we are outside the iform module.
     global $indicia_theme_path;
     $indicia_theme_path = iform_media_folder_path() . 'themes/';

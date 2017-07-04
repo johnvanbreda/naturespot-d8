@@ -62,7 +62,24 @@ user_league:
   category: NatureSpot
   template: templates/user-league
   regions:
+    top:
+      label: Top
     tab1:
       label: Tab 1
+    tab2:
+      label: Tab 2
+my_records:
+  label: My records
+  category: NatureSpot
+  template: templates/my-records
+  regions:
+    top:
+      label: Top
+    tab1left:
+      label: Tab 1 left
+    tab1right:
+      label: Tab 1 right
+    tab1bottom:
+      label: Tab 1 bottom
     tab2:
       label: Tab 2

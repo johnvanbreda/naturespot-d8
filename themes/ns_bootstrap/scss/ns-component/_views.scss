@@ -31,8 +31,9 @@
       > div {
         @include image-panel;
       }
-      img {
+      .views-field-field-file-name img {
         height: 140px;
+        margin: auto;
       }
       &.confidence-Likely > div, &.confidence-Uncertain > div {
         border: solid $alert-colour 1px;
@@ -48,6 +49,9 @@
           content: "Unpublished";
         }
       }
+      .photo-id-icon {
+        margin-top: -$gap*3;
+      }
     }
 
   }
@@ -58,7 +62,7 @@
   .species-gallery .item-list {
     ul {
       li {
-        img {
+        .views-field-field-file-name img {
           height: 230px;
         }
       }

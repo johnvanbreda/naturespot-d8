@@ -48,14 +48,14 @@ class SpeciesGalleryFilterPlugin extends FilterPluginBase {
 
     $expression = <<<SQL
 (
-  taxonomy_term_field_data_node__menu__taxonomy_term_hierarchy.parent not in (19327, 19701)
+  taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent not in (19327, 19701)
   or (
     node__field_caterpillar.field_caterpillar_value = '1' and 
-    taxonomy_term_field_data_node__menu__taxonomy_term_hierarchy.parent = 19327
+    taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = 19327
   )
   or (
     node__field_gall.field_gall_value = '1' and 
-    taxonomy_term_field_data_node__menu__taxonomy_term_hierarchy.parent = 19701
+    taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = 19701
   )
 ) 
 SQL;

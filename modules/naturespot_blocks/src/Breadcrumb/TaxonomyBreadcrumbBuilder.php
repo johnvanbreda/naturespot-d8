@@ -33,7 +33,7 @@ class TaxonomyBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $links[] = Link::createFromRoute($this->t('Species library'), 'entity.node.canonical', ['node' => 17]);
     $parameters = $route_match->getParameters()->all();
     if (isset($parameters['node'])) {
-      $tids = $parameters['node']->menu->getValue();
+      $tids = $parameters['node']->field_species_library_menu->getValue();
       $storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
       foreach ($tids as $tid) {
         $term = \Drupal\taxonomy\Entity\Term::load($tid['target_id']);

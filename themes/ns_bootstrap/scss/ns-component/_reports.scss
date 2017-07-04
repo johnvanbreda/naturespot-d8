@@ -1,0 +1,27 @@
+table.report-grid {
+  width: 100%;
+  .pager {
+    margin: 0;
+  }
+}
+
+#my-records-params {
+  .form-row {
+    padding-right: $gap*4;
+    * {
+      vertical-align: middle;
+    }
+  }
+  input[type="submit"] {
+    display: inline-block
+  }
+}
+
+@media (min-width: $screen-md-min) {
+  #my-records-params {
+    .form-row {
+      float: left;
+      width: 50%;
+    }
+  }
+}

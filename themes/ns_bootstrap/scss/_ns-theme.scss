@@ -35,13 +35,13 @@ $menu-background-colour: #dddddd;
   text-align: center;
 }
 
-@import 'ns-components/reports';
-@import 'ns-components/views';
-@import 'ns-components/places';
-@import 'ns-components/species';
-@import 'ns-components/jump-menus';
-@import 'ns-components/forums';
-@import 'ns-components/home';
+@import 'ns-component/reports';
+@import 'ns-component/views';
+@import 'ns-component/places';
+@import 'ns-component/species';
+@import 'ns-component/jump-menus';
+@import 'ns-component/forums';
+@import 'ns-component/home';
 
 /** Bootstrap tweaks */
 .row-no-padding {
@@ -72,10 +72,18 @@ h2 {
 
 header#navbar {
   min-height: 30px;
+  margin: 8px;
+  background-color: #333333;
   #block-secondarylinks {
-    .navbar-nav > li > a {
-      padding: $gap - 2 $gap;
-      font-size: 13px;
+    .navbar-nav > li {
+      a {
+        padding: $gap - 2 $gap;
+        font-size: 12px;
+        color: $page-colour;
+      }
+      &.active a {
+        background-color: #444444;
+      }
     }
     .dropdown-menu > li {
       float: none;
@@ -100,6 +108,19 @@ header#navbar {
 }
 #block-ns-bootstrap-main-menu {
   font-size: 16px;
+  .container-fluid {
+    padding-bottom: 0;
+    background: $menu-background-colour;
+    ul {
+      clear: left;
+      width: 100%;
+      background: transparent;
+      @include border-radius(4px);
+    }
+  }
+}
+#block-ns-bootstrap-main-menu {
+
 }
 @media (min-width: $screen-lg-min) {
   #banner {
@@ -119,15 +140,6 @@ header#navbar {
     #ns-title-image {
       width: 100%;
     }
-  }
-}
-#block-ns-bootstrap-main-menu {
-  ul {
-    clear: left;
-    width: 100%;
-    background-color: $menu-background-colour;
-    @include border-radius(4px);
-    margin-bottom: $gap;
   }
 }
 div.main-container {
@@ -150,4 +162,24 @@ div.main-container {
 
 iframe.map-frame {
   @include image-panel;
+}
+
+/* Some extra helpers */
+/* Add class="in-box" to create a nice frame around an element. */
+.in-box {
+  @include shadow;
+  border: solid $dark-outline 1px;
+  padding: $gap;
+}
+/* Add class="full-width" to make an element occupy width of the parent container. */
+.full-width {
+  width: 100%;
+}
+.padded {
+  padding: $gap;
+}
+
+/* Tweaks to Bootstrap helpers */
+.bg-primary a {
+  color: white;
 }

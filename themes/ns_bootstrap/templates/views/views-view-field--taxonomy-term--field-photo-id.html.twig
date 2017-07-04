@@ -1,0 +1,15 @@
+{% set value = output|trim %}
+  {% if value == "G" %}
+    {% set colour = "green" %}
+    {% set title = "Easily identified from a photo." %}
+  {% elseif value == "A" %}
+    {% set colour = "amber" %}
+    {% set title = "Identifiable from a photo with care." %}
+  {% elseif value == "R" %}
+    {% set colour = "red" %}
+    {% set title = "Cannot usually be identified from a photo." %}
+  {% else %}
+    {% set colour = value %}
+    {% set title = "Unknown" %}
+  {%  endif %}
+<img class="photo-id-icon pull-right" src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" />

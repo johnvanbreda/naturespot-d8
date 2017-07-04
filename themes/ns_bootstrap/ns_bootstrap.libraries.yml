@@ -22,5 +22,6 @@ ns-scripts:
   version: 1.x
   js:
     js/ns_bootstrap.js: {}
+    js/jquery.lazyloadxt.min.js: {}
   dependencies:
     - core/jquery

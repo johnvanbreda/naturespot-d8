@@ -21,7 +21,11 @@
       <div class="col-md-6">{{ content.tab1col2 }}</div>
     </div>
     <div class="row">
-      <div class="col-md-12">{{ content.tab1bottom }}</div>
+      <div class="col-md-12">
+        <h2>Latest records</h2>
+        {{ drupal_plugin_block('ns_wild_place_latest_records_block', false) }}
+        {{ content.tab1bottom }}
+      </div>
     </div>
   </div>
   <div id="tab2" class="tab-pane fade">

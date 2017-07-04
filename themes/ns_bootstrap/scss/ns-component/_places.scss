@@ -3,11 +3,6 @@
     @include solid-heading;
     margin: $gap 0;
   }
-  .field--name-body {
-    @include shadow;
-    border: solid $dark-outline 1px;
-    padding: $gap;
-  }
   #map-container {
     margin: $gap 0;
   }
@@ -17,5 +12,10 @@
         @include image-panel;
       }
     }
+  }
+  .view-parish-latest-news {
+    @include shadow;
+    border: solid $dark-outline 1px;
+    padding: $gap;
   }
 }
