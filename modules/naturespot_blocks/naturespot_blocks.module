@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\Core\Cache\Cache;
+
 define('NS_GRANT_ALL', 51);
 
 function naturespot_blocks_views_data_alter(&$data)

@@ -3,6 +3,8 @@
 namespace Drupal\naturespot_blocks\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\taxonomy\Entity\Term;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class NsBlockController extends ControllerBase {
 
@@ -30,5 +32,21 @@ class NsBlockController extends ControllerBase {
     }
     $nid = array_pop($result);
     return $this->redirect('entity.node.canonical', ['node' => $nid]);
+  }
+
+  public function taxonCreate() {
+    if (empty($_POST['parent_id']) || empty($_POST['taxon'])
+        || empty($_POST['description']) || empty($_POST['redirect'])) {
+      \Drupal::logger('naturespot_blocks')->error('Invalid call to taxonCreate');
+      return $this->redirect('<front>');
+    } else {
+      Term::create(array(
+        'parent' => array($_POST['parent_id']),
+        'name' => $_POST['taxon'],
+        'description' => $_POST['description'],
+        'vid' => 'taxa',
+      ))->save();
+    }
+    return new RedirectResponse($_POST['redirect']);
   }
 }

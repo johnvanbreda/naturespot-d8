@@ -24,17 +24,14 @@ class NsSpeciesCountBlock extends BlockBase {
     $config = \Drupal::config('iform.settings');
     $readAuth = \report_helper::get_read_auth($config->get('website_id'), $config->get('password'));
     $output = \report_helper::get_report_data(array(
-      'dataSource' => 'library/totals/species_and_occurrence_counts',
+      'dataSource' => 'naturespot/species_count',
       'readAuth' => $readAuth,
       'extraParams' => array(
-        'website_id' => $config->get('website_id'),
-        'date_from' => '',
-        'date_to' => '',
-        'survey_id' => ''
+        'website_id' => $config->get('website_id')
       ),
       'mode'=>'report',
-      'caching'=>true,
-      'cachePerUser'=>false
+      'caching' => TRUE,
+      'cachePerUser' => FALSE
     ));
 
     $r = "<p id=\"site-species-count\" class=\"in-box\">Total count of species: " . $output[0]['species_count'] . '</p>';
@@ -42,7 +39,10 @@ class NsSpeciesCountBlock extends BlockBase {
     global $indicia_theme_path;
     $indicia_theme_path = iform_media_folder_path() . 'themes/';
     return array(
-      '#markup' => $r
+      '#markup' => $r,
+      '#cache' => [
+        'max-age' => 3600
+      ]
     );
 
   }

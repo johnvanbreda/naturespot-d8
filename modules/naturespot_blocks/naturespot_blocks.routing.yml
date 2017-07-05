@@ -5,3 +5,11 @@ naturespot_blocks.species_by_key:
     _title: 'Species by key'
   requirements:
     _permission: 'access content'
+naturespot_blocks.taxon_create:
+  path: 'ns/taxon-create'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::taxonCreate'
+    _title: 'Taxon create'
+  methods: [POST]
+  requirements:
+    _permission: 'create species content'
