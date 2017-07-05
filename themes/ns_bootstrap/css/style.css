@@ -6426,6 +6426,8 @@ table.report-grid {
       opacity: 0.4; }
       .species-gallery .item-list ul li.status-Off:before {
         content: "Unpublished"; }
+    .species-gallery .item-list ul li .views-field-taxa {
+      min-height: 24px; }
     .species-gallery .item-list ul li .photo-id-icon {
       margin-top: -24px; }
 
