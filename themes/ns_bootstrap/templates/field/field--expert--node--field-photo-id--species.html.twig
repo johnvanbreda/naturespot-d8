@@ -26,14 +26,18 @@
     {% set title = "Cannot usually be identified from a photo." %}
   {% else %}
     {% set colour = value %}
-    {% set title = "Unknown" %}
+    {% set raw = true %}
   {%  endif %}
   <div class="field row">
     <div class="col-md-3 field-label-inline">{{ label }}</div>
     <div class="col-md-9">
       <a href="{{ url('<front>') }}content/photo-identification">
-        <img src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" width="32" height="20"
-             title="{{ title }} Click for more info." />
+        {% if raw is defined %}
+          {{ value|raw }}
+        {% else %}
+          <img src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" width="32" height="20"
+               title="{{ title }} Click for more info." />
+        {% endif %}
       </a>
     </div>
   </div>

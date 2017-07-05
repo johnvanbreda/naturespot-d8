@@ -1,4 +1,5 @@
 {% set value = output|trim %}
+{% if value is not empty %}
   {% if value == "G" %}
     {% set colour = "green" %}
     {% set title = "Easily identified from a photo." %}
@@ -10,6 +11,12 @@
     {% set title = "Cannot usually be identified from a photo." %}
   {% else %}
     {% set colour = value %}
-    {% set title = "Unknown" %}
+    {% set raw = true %}
   {%  endif %}
-<img class="photo-id-icon pull-right" src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" />
+
+  {% if raw is defined %}
+    <span class="photo-id-icon pull-right">{{ output|raw }}</span>
+  {% else %}
+    <img class="photo-id-icon pull-right" src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" />
+  {% endif %}
+{% endif %}
