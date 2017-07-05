@@ -51,7 +51,8 @@ class NsUserLeagueRecordsBlock extends BlockBase {
     global $indicia_theme_path;
     $indicia_theme_path = iform_media_folder_path() . 'themes/';
     return array(
-      '#markup' => $r,
+      '#type' => 'inline_template',
+      '#template' => $r,
       'library' => array(
         'iform/base',
         'iform/indiciaFns',
