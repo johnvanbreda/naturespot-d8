@@ -14,7 +14,7 @@
 #}
 
 {% for item in items %}
-  {% set value = item.content["#text"] %}
+  {% set value = item.content["#text"]|striptags|trim %}
   {% if value == "G" %}
     {% set colour = "green" %}
     {% set title = "Easily identified from a photo." %}
@@ -25,7 +25,6 @@
     {% set colour = "red" %}
     {% set title = "Cannot usually be identified from a photo." %}
   {% else %}
-    {% set colour = value %}
     {% set raw = true %}
   {%  endif %}
   <div class="field row">
