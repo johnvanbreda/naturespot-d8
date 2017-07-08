@@ -1,17 +1,19 @@
 <?php
 
 use Drupal\Core\Cache\Cache;
+use \Drupal\node\Entity\Node;
 
 define('NS_GRANT_ALL', 51);
 
 function naturespot_blocks_views_data_alter(&$data)
 {
-  $data['node']['ns_species_gallery_filter'] = [
+  $data['node_field_data']['species_gallery_filter'] = [
     'title' => t('Species Gallery filter'),
     'filter' => [
       'title' => t('Species Gallery filter'),
       'help' => 'filters output of gallery with caterpillar/gall logic',
-      'id' => 'ns_species_gallery_filter',
+      'field' => 'nid',
+      'id' => 'naturespot_blocks_species_gallery_filter',
     ]
   ];
 }
@@ -61,4 +63,82 @@ function naturespot_blocks_node_access_records(\Drupal\node\NodeInterface $node)
     );
   }
   return $grants;
+}
+
+/**
+ * Implementation of hook_cron.
+ * Copies verified image data into Drupal image links.
+ */
+function naturespot_blocks_cron() {
+  iform_load_helpers(['report_helper']);
+  // Get a list of the images which are for verified records but are not copied to Drupal or rejected.
+  $config = \Drupal::config('iform.settings');
+  $auth = \report_helper::get_read_write_auth($config->get('website_id'), $config->get('password'));
+  $auth['write_tokens']['persist_auth'] = true;
+  $fetchOpts = array(
+    'dataSource'=>'naturespot/images_to_copy',
+    'mode'=>'report',
+    'readAuth' => $auth['read'],
+  );
+  $images = \report_helper::get_report_data($fetchOpts);
+  foreach ($images as $image) {
+    if (empty($image['external_key'])) {
+      continue;
+    }
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', 'species')
+      ->condition('status', 1)
+      ->condition('field_nbn_number', $image['external_key']);
+    $nids = $query->execute();
+    if (count($nids) > 0) {
+      // should only be 1
+      $nid = array_pop($nids);
+      $node = \Drupal\node\Entity\Node::load($nid);
+      $tid = $node->taxa->target_id;
+      $image['priority'] = 8; // default for now
+      // Reformat the date
+      //$image['date'] = date('d F Y', str_replace('/', '-', $image['date']));
+      $image['confidence'] = empty($image['confidence']) ? 'Certain' : $image['confidence'];
+      _add_image_to_db($node, $tid, $image);
+      // Now, mark the image as uploaded in Indicia
+      iform_load_helpers(['data_entry_helper']);
+      $submission = array(
+        'occurrence_image:id' => $image['id'],
+        'occurrence_image:external_details' => 'Copied to Drupal',
+        'website_id' => $config->get('website_id')
+      );
+      $submission = \data_entry_helper::build_submission($submission, array('model' => 'occurrence_image'));
+      $response = \data_entry_helper::forward_post_to('occurrence_image', $submission, array_merge($auth['write_tokens']));
+    }
+  }
+}
+
+function _add_image_to_db($speciesNode, $tid, $image) {
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', 'image_link')
+    ->condition('field_file_name', $image['path'])
+    ->accessCheck(FALSE);
+  $existing = $query->execute();
+  if (empty($existing)) {
+    $speciesNid = $speciesNode->id();
+    // Create node object with attached file.
+    $node = Node::create([
+      'type' => 'image_link',
+      'status' => 0,
+      'title' => $image['path'],
+      'field_file_name' => [$image['path']],
+      'field_priority' => [$image['priority']],
+      'field_site' => [$image['location_name']],
+      'field_date' => [$image['date']],
+      'field_recorder' => [$image['recorders']],
+      'field_comment' => [$image['caption']],
+      'field_confidence' => [$image['confidence']],
+      'field_moderator' => ['admin'],
+      'taxa' => ['target_id' => $tid],
+    ]);
+    $node->save();
+    return true;
+  } else {
+    return false;
+  }
 }

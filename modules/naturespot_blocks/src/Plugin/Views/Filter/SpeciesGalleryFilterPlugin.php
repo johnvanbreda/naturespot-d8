@@ -12,7 +12,7 @@ use Drupal\views\ViewExecutable;
  *
  * @ingroup views_filter_handlers
  *
- * @ViewsFilter("ns_species_gallery_filter")
+ * @ViewsFilter("naturespot_blocks_species_gallery_filter")
  */
 
 
@@ -23,6 +23,7 @@ class SpeciesGalleryFilterPlugin extends FilterPluginBase {
   public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
     parent::init($view, $display, $options);
     $this->valueTitle = t('Species Gallery filter');
+    $this->valueOptions = [];
   }
 
   public function query() {
