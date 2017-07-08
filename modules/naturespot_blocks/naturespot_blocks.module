@@ -1,21 +1,51 @@
 <?php
 
-use Drupal\Core\Cache\Cache;
-use \Drupal\node\Entity\Node;
+use Drupal\node\Entity\Node;
+use Drupal\views\Views;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+
 
 define('NS_GRANT_ALL', 51);
 
-function naturespot_blocks_views_data_alter(&$data)
-{
-  $data['node_field_data']['species_gallery_filter'] = [
-    'title' => t('Species Gallery filter'),
-    'filter' => [
-      'title' => t('Species Gallery filter'),
-      'help' => 'filters output of gallery with caterpillar/gall logic',
-      'field' => 'nid',
-      'id' => 'naturespot_blocks_species_gallery_filter',
-    ]
-  ];
+function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if ($view->id() == 'species_gallery_for_group') {
+    $configuration = [
+      'table' => 'node__field_caterpillar',
+      'field' => 'entity_id',
+      'left_table' => 'taxa_taxonomy_term_field_data',
+      'left_field' => 'nid',
+      'operator' => '='
+    ];
+    $join = Views::pluginManager('join')->createInstance('standard', $configuration);
+    $query->addRelationship('node__field_caterpillar', $join, 'taxa_taxonomy_term_field_data');
+
+    $configuration = [
+      'table' => 'node__field_gall',
+      'field' => 'entity_id',
+      'left_table' => 'taxa_taxonomy_term_field_data',
+      'left_field' => 'nid',
+      'operator' => '='
+    ];
+    $join = Views::pluginManager('join')->createInstance('standard', $configuration);
+    $query->addRelationship('node__field_gall', $join, 'taxa_taxonomy_term_field_data');
+
+    $expression = <<<SQL
+  (
+    taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent not in (19327, 19701)
+    or (
+      node__field_caterpillar.field_caterpillar_value = '1' and 
+      taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = 19327
+    )
+    or (
+      node__field_gall.field_gall_value = '1' and 
+      taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = 19701
+    )
+  ) 
+SQL;
+
+    $query->addWhereExpression(0, $expression);
+  }
 }
 
 function naturespot_blocks_form_user_login_form_alter(&$form, $form_state) {
