@@ -10,6 +10,19 @@ define('NS_GRANT_ALL', 51);
 
 function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
   if ($view->id() == 'species_gallery_for_group') {
+    $current_path = \Drupal::service('path.current')->getPath();
+    $path_args = explode('/', $current_path);
+    $menuTid = array_pop($path_args);
+    $menuTid = 19327;
+    // add a basic top level filter
+    $query->addWhereExpression(0,
+      "(taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = $menuTid
+       or taxonomy_term_field_data_taxonomy_term_hierarchy__taxonomy_term_hierarchy.parent=$menuTid)"
+    );
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($menuTid);
+    $isCaterpillar = stripos($term->name->value, 'caterpillar') !== false;
+    $isGall = stripos($term->name->value, 'gall') !== false;
+    // Add relationships for caterpillar info
     $configuration = [
       'table' => 'node__field_caterpillar',
       'field' => 'entity_id',
@@ -19,7 +32,7 @@ function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBa
     ];
     $join = Views::pluginManager('join')->createInstance('standard', $configuration);
     $query->addRelationship('node__field_caterpillar', $join, 'taxa_taxonomy_term_field_data');
-
+    // now the relationship for galls
     $configuration = [
       'table' => 'node__field_gall',
       'field' => 'entity_id',
@@ -29,22 +42,12 @@ function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBa
     ];
     $join = Views::pluginManager('join')->createInstance('standard', $configuration);
     $query->addRelationship('node__field_gall', $join, 'taxa_taxonomy_term_field_data');
+    // Filter appropriately for caterpillar and gall data
+    $caterpillarFilter = $isCaterpillar ? 1 : 0;
+    $query->addWhere(0, 'node__field_caterpillar.field_caterpillar_value', $caterpillarFilter);
 
-    $expression = <<<SQL
-  (
-    taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent not in (19327, 19701)
-    or (
-      node__field_caterpillar.field_caterpillar_value = '1' and 
-      taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = 19327
-    )
-    or (
-      node__field_gall.field_gall_value = '1' and 
-      taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = 19701
-    )
-  ) 
-SQL;
-
-    $query->addWhereExpression(0, $expression);
+    $gallFilter = $isGall ? 1 : 0;
+    $query->addWhere(0, 'node__field_gall.field_gall_value', $gallFilter);
   }
 }
 
