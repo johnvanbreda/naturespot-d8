@@ -13,7 +13,6 @@ function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBa
     $current_path = \Drupal::service('path.current')->getPath();
     $path_args = explode('/', $current_path);
     $menuTid = array_pop($path_args);
-    $menuTid = 19327;
     // add a basic top level filter
     $query->addWhereExpression(0,
       "(taxonomy_term_field_data_node__field_species_library_menu__taxonomy_term_hierarchy.parent = $menuTid
@@ -22,32 +21,44 @@ function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBa
     $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($menuTid);
     $isCaterpillar = stripos($term->name->value, 'caterpillar') !== false;
     $isGall = stripos($term->name->value, 'gall') !== false;
-    // Add relationships for caterpillar info
-    $configuration = [
-      'table' => 'node__field_caterpillar',
-      'field' => 'entity_id',
-      'left_table' => 'taxa_taxonomy_term_field_data',
-      'left_field' => 'nid',
-      'operator' => '='
-    ];
-    $join = Views::pluginManager('join')->createInstance('standard', $configuration);
-    $query->addRelationship('node__field_caterpillar', $join, 'taxa_taxonomy_term_field_data');
-    // now the relationship for galls
-    $configuration = [
-      'table' => 'node__field_gall',
-      'field' => 'entity_id',
-      'left_table' => 'taxa_taxonomy_term_field_data',
-      'left_field' => 'nid',
-      'operator' => '='
-    ];
-    $join = Views::pluginManager('join')->createInstance('standard', $configuration);
-    $query->addRelationship('node__field_gall', $join, 'taxa_taxonomy_term_field_data');
-    // Filter appropriately for caterpillar and gall data
-    $caterpillarFilter = $isCaterpillar ? 1 : 0;
-    $query->addWhere(0, 'node__field_caterpillar.field_caterpillar_value', $caterpillarFilter);
-
-    $gallFilter = $isGall ? 1 : 0;
-    $query->addWhere(0, 'node__field_gall.field_gall_value', $gallFilter);
+    if ($isCaterpillar) {
+      // Add relationships for caterpillar info
+      $configuration = [
+        'table' => 'node__field_caterpillar',
+        'field' => 'entity_id',
+        'left_table' => 'taxa_taxonomy_term_field_data',
+        'left_field' => 'nid',
+        'operator' => '='
+      ];
+      $join = Views::pluginManager('join')->createInstance('standard', $configuration);
+      $query->addRelationship('node__field_caterpillar', $join, 'taxa_taxonomy_term_field_data');
+      $query->addWhere(0, 'node__field_caterpillar.field_caterpillar_value', 1);
+    } elseif ($isGall) {
+      // now the relationship for galls
+      $configuration = [
+        'table' => 'node__field_gall',
+        'field' => 'entity_id',
+        'left_table' => 'taxa_taxonomy_term_field_data',
+        'left_field' => 'nid',
+        'operator' => '='
+      ];
+      $join = Views::pluginManager('join')->createInstance('standard', $configuration);
+      $query->addRelationship('node__field_gall', $join, 'taxa_taxonomy_term_field_data');
+      $query->addWhere(0, 'node__field_gall.field_gall_value', 1);
+    } else {
+      // not caterpillar or gall, so priority the top priority images
+      // Add relationships for caterpillar info
+      $configuration = [
+        'table' => 'node__field_priority',
+        'field' => 'entity_id',
+        'left_table' => 'taxa_taxonomy_term_field_data',
+        'left_field' => 'nid',
+        'operator' => '='
+      ];
+      $join = Views::pluginManager('join')->createInstance('standard', $configuration);
+      $query->addRelationship('node__field_priority', $join, 'taxa_taxonomy_term_field_data');
+      $query->addWhere(0, 'node__field_priority.field_priority_value', 1);
+    }
   }
 }
 
@@ -102,7 +113,7 @@ function naturespot_blocks_node_access_records(\Drupal\node\NodeInterface $node)
  * Implementation of hook_cron.
  * Copies verified image data into Drupal image links.
  */
-function naturespot_blocks_cron() {
+/*function naturespot_blocks_cron() {
   iform_load_helpers(['report_helper']);
   // Get a list of the images which are for verified records but are not copied to Drupal or rejected.
   $config = \Drupal::config('iform.settings');
@@ -144,7 +155,7 @@ function naturespot_blocks_cron() {
       $response = \data_entry_helper::forward_post_to('occurrence_image', $submission, array_merge($auth['write_tokens']));
     }
   }
-}
+}*/
 
 function _add_image_to_db($speciesNode, $tid, $image) {
   $query = \Drupal::entityQuery('node')
