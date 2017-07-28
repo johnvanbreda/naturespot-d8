@@ -45,7 +45,7 @@ class NsWildPlaceLatestImageBlock extends BlockBase {
 HTML;
 
     $options=array(
-      'id'=>'latest-images',
+      'id'=>'latest-image',
       'dataSource' => 'naturespot/images_by_site',
       'mode' => 'report',
       'readAuth' => $readAuth,
