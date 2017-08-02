@@ -12,5 +12,6 @@
  * Adds useful theme variables.
  */
 function ns_bootstrap_preprocess(&$variables, $hook, $info) {
-  $variables['theme_path'] = base_path() . $variables['directory'];
+  if (isset($variables['directory']))
+    $variables['theme_path'] = base_path() . $variables['directory'];
 }
