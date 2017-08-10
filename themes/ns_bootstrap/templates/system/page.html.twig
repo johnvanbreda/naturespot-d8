@@ -108,8 +108,16 @@
         {% block header %}
           <div class="col-sm-12" role="banner" id="banner">
             {{ page.header }}
-            <img src="{{ theme_path }}/images/headbg-frog.jpg" id="frog-image" class="pull-left" />
-            <img src="{{ theme_path }}/images/headbg.jpg" id="ns-title-image" />
+            {% if node.field_banner_image_left.entity.fileuri %}
+              <img src="{{ file_url(node.field_banner_image_left.entity.fileuri) }}" id="frog-image" class="pull-left" />
+            {% else %}
+              <img src="{{ theme_path }}/images/headbg-frog.jpg" id="frog-image" class="pull-left" />
+            {% endif %}
+            {% if node.field_banner_image_right.entity.fileuri %}
+              <img src="{{ file_url(node.field_banner_image_right.entity.fileuri) }}" id="ns-title-image" />
+            {% else %}
+              <img src="{{ theme_path }}/images/headbg.jpg" id="ns-title-image" />
+            {% endif %}
           </div>
         {% endblock %}
       {% endif %}
