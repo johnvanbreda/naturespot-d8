@@ -22,7 +22,6 @@ class NsWildPlaceLatestRecordsBlock extends BlockBase {
   public function build() {
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node) {
-      drupal_set_message('NsWildPlaceLatestImages8Block must be placed on a parish or wild place node page');
       return array();
     }
     iform_load_helpers(array('report_helper'));
@@ -61,10 +60,12 @@ class NsWildPlaceLatestRecordsBlock extends BlockBase {
     $indicia_theme_path = iform_media_folder_path() . 'themes/';
     return array(
       '#markup' => SafeMarkup::format($r, array()),
-      'library' => array(
-        'iform/base',
-        'iform/indiciaFns',
-        'iform/reportgrid'
+      '#attached' => array(
+        'library' => array(
+          'iform/base',
+          'iform/indiciaFns',
+          'iform/reportgrid'
+        )
       )
     );
 

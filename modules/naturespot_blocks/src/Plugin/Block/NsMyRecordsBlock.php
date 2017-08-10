@@ -49,11 +49,26 @@ class NsMyRecordsBlock extends BlockBase {
     $indicia_theme_path = iform_media_folder_path() . 'themes/';
     return array(
       '#markup' => $r,
-      'library' => array(
-        'iform/base',
-        'iform/indiciaFns',
-        'iform/reportgrid'
-      )
+      '#attached' => array(
+        'library' => array(
+          'iform/base',
+          'iform/indiciaFns',
+          'iform/reportgrid'
+        )
+      ),
+      '#cache' => [
+        'contexts' => [
+          // output is different per user
+          'user'
+        ],
+        'tags' => [
+          // output updates when the user posts a record
+          'user_records:$userId'
+        ],
+        'max-age' =>
+          // max age 0.5 hrs to ensure readAuth stays valid
+          1800
+      ]
     );
   }
 

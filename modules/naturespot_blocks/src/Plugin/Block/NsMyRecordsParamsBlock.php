@@ -49,10 +49,12 @@ class NsMyRecordsParamsBlock extends BlockBase {
     return array(
       '#type' => 'inline_template',
       '#template' => $r,
-      'library' => array(
-        'iform/base',
-        'iform/indiciaFns',
-        'iform/reportgrid'
+      '#attached' => array(
+        'library' => array(
+          'iform/base',
+          'iform/indiciaFns',
+          'iform/reportgrid'
+        )
       )
     );
   }

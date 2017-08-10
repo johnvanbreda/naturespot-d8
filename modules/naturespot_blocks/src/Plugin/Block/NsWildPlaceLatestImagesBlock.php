@@ -22,7 +22,6 @@ class NsWildPlaceLatestImagesBlock extends BlockBase {
   public function build() {
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node) {
-      drupal_set_message('NsWildPlaceLatestImagesBlock must be placed on a parish or wild place node page');
       return array();
     }
     iform_load_helpers(array('report_helper'));
@@ -38,7 +37,7 @@ class NsWildPlaceLatestImagesBlock extends BlockBase {
   <a class="colorbox" href="http://warehouse1.indicia.org.uk/upload/{image_path}" title="{common} {taxon}, {recorder}, {date}">
     <img width="100" src="http://warehouse1.indicia.org.uk/upload/thumb-{image_path}" alt="{common} {taxon}"/>
   </a><br/>
-  <a href="{rootFolder}species_by_key?key={external_key}">{common} <em>{taxon}</em></a>
+  <a href="{rootFolder}species_by_key?key={external_key}">{formatted_taxon}</a>
 </div>
 HTML;
 

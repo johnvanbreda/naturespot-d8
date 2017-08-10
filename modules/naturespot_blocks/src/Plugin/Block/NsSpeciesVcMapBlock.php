@@ -22,7 +22,6 @@ class NsSpeciesVcMapBlock extends BlockBase {
   public function build() {
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node) {
-      drupal_set_message('NsSpeciesVcMapBlock must be placed on a parish or wild place node page');
       return array();
     }
     iform_load_helpers(array('map_helper', 'data_entry_helper'));

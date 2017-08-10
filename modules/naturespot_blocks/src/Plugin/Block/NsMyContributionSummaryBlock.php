@@ -21,6 +21,7 @@ class NsMyContributionSummaryBlock extends BlockBase {
     iform_load_helpers(array('report_helper'));
     $config = \Drupal::config('iform.settings');
     $readAuth = \report_helper::get_read_auth($config->get('website_id'), $config->get('password'));
+    $userId = hostsite_get_user_field('indicia_user_id', '');
     $r = '<h2>Your contribution summary</h2>';
     $r .= \report_helper::freeform_report(array(
       'id' => 'my-year-summary',
@@ -33,7 +34,7 @@ class NsMyContributionSummaryBlock extends BlockBase {
       'extraParams' => array(
         'taxon_list_id' => 8,
         'username' => hostsite_get_user_field('name'),
-        'user_id' => hostsite_get_user_field('indicia_user_id', '')
+        'user_id' => $userId
       ),
       'paramDefaults' => array(
         'taxon_group_id' => '',
@@ -53,9 +54,19 @@ class NsMyContributionSummaryBlock extends BlockBase {
       'footer' => '</div>'
     ));
     $r .= '<p>Visit the <a href="user-league">User League</a> page to see how many species and records you have recorded with NatureSpot compared to other users.</p>';
-    return array(
-      '#markup' => $r
-    );
+    return [
+      '#markup' => $r,
+      '#cache' => [
+        'contexts' => [
+          // output is different per user
+          'user'
+        ],
+        'tags' => [
+          // output updates when the user posts a record
+          'user_records:$userId'
+        ]
+      ]
+    ];
   }
 
 }

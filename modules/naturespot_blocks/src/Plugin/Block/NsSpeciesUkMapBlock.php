@@ -22,7 +22,6 @@ class NsSpeciesUkMapBlock extends BlockBase {
   public function build() {
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node) {
-      drupal_set_message('NsSpeciesUkMapBlock must be placed on a parish or wild place node page');
       return array();
     }
     $nbnKey = $node->field_nbn_number->value;

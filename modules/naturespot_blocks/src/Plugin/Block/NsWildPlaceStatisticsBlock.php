@@ -22,7 +22,6 @@ class NsWildPlacestatisticsBlock extends BlockBase {
   public function build() {
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node) {
-      drupal_set_message('NsWildPlacestatisticsBlock must be placed on a parish or wild place node page');
       return array();
     }
     iform_load_helpers(array('report_helper'));
@@ -44,7 +43,7 @@ class NsWildPlacestatisticsBlock extends BlockBase {
         'date_from' => '',
         'date_to' => '',
         'survey_id' => '',
-        'sortdir' => desc,
+        'sortdir' => 'desc',
         'include_total' => 'yes'
       ),
       'columns' => array(
