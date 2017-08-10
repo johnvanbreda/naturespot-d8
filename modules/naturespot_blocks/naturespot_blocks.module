@@ -112,8 +112,8 @@ function naturespot_blocks_node_access_records(\Drupal\node\NodeInterface $node)
 /**
  * Implementation of hook_cron.
  * Copies verified image data into Drupal image links.
- */
-/*function naturespot_blocks_cron() {
+ *
+function naturespot_blocks_cron() {
   iform_load_helpers(['report_helper']);
   // Get a list of the images which are for verified records but are not copied to Drupal or rejected.
   $config = \Drupal::config('iform.settings');
@@ -165,6 +165,10 @@ function _add_image_to_db($speciesNode, $tid, $image) {
   $existing = $query->execute();
   if (empty($existing)) {
     $speciesNid = $speciesNode->id();
+    // reformat the date
+    $date = $image['date'];
+    $time = strtotime(str_replace('/','-',$date));
+    $date = date('d F Y', $time);
     // Create node object with attached file.
     $node = Node::create([
       'type' => 'image_link',
@@ -173,7 +177,7 @@ function _add_image_to_db($speciesNode, $tid, $image) {
       'field_file_name' => [$image['path']],
       'field_priority' => [$image['priority']],
       'field_site' => [$image['location_name']],
-      'field_date' => [$image['date']],
+      'field_date' => [$date],
       'field_recorder' => [$image['recorders']],
       'field_comment' => [$image['caption']],
       'field_confidence' => [$image['confidence']],
