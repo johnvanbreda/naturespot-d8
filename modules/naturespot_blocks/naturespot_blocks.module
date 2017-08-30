@@ -77,7 +77,7 @@ function _naturespot_blocks_user_login_form_submit($form, $form_state) {
 function naturespot_blocks_node_grants(\Drupal\Core\Session\AccountInterface $account, $op) {
   $grants = array();
   if ($account->hasPermission('view ns admin page'))
-    $grants['ns_admin_page_access'] = NS_GRANT_ALL;
+    $grants['ns_admin_page_access'] = [NS_GRANT_ALL];
   return $grants;
 }
 
