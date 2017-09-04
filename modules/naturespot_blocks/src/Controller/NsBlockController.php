@@ -34,19 +34,28 @@ class NsBlockController extends ControllerBase {
     return $this->redirect('entity.node.canonical', ['node' => $nid]);
   }
 
-  public function taxonCreate() {
-    if (empty($_POST['parent_id']) || empty($_POST['taxon'])
-        || empty($_POST['description']) || empty($_POST['redirect'])) {
-      \Drupal::logger('naturespot_blocks')->error('Invalid call to taxonCreate');
+  private function taxonomyCreate($vid) {
+    if (empty($_POST['taxon']) || empty($_POST['redirect'])) {
+      \Drupal::logger('naturespot_blocks')->error('Invalid call to taxonomyCreate');
       return $this->redirect('<front>');
     } else {
-      Term::create(array(
-        'parent' => array($_POST['parent_id']),
+      $termData = array(
         'name' => $_POST['taxon'],
         'description' => $_POST['description'],
-        'vid' => 'taxa',
-      ))->save();
+        'vid' => $vid,
+      );
+      if (!empty($_POST['parent_id']))
+        $termData['parent'] = $_POST['parent_id'];
+      Term::create($termData)->save();
     }
     return new RedirectResponse($_POST['redirect']);
+  }
+
+  public function taxonCreate() {
+    return $this->taxonomyCreate('taxa');
+  }
+
+  public function menuCreate() {
+    return $this->taxonomyCreate('menu');
   }
 }

@@ -13,3 +13,11 @@ naturespot_blocks.taxon_create:
   methods: [POST]
   requirements:
     _permission: 'create species content'
+naturespot_blocks.menu_create:
+  path: 'ns/menu-create'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::menuCreate'
+    _title: 'Menu create'
+  methods: [POST]
+  requirements:
+    _permission: 'create species content'
