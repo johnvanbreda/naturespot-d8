@@ -21,8 +21,8 @@ $menu-background-colour: #dddddd;
   box-shadow: 2px 2px 4px silver;
 }
 
-@mixin solid-heading() {
-  background: $heading-background-colour;
+@mixin solid-heading($background: $heading-background-colour) {
+  background: $background;
   padding: $gap / 2;
 }
 
@@ -65,6 +65,11 @@ h1 {
 h2 {
   font-size: 20px;
   @include solid-heading;
+}
+
+h3 {
+  font-size: 18px;
+  @include solid-heading(darken($page-colour, 5%));
 }
 
 .container {

@@ -45,15 +45,20 @@
       /* Unpublished */
       &.status-Off {
         opacity: 0.4;
+        > div {
+          border-color: red;
+        }
         &:before {
           content: "Unpublished";
         }
+      }
+      .views-field-taxa {
+        min-height: $gap*3;
       }
       .photo-id-icon {
         margin-top: -$gap*3;
       }
     }
-
   }
 }
 
@@ -78,6 +83,19 @@
         img {
           height: auto;
           width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.species-gallery.view-latest-images {
+  .item-list {
+    ul {
+      li {
+        img {
+          max-height: 250px;
+          margin: auto;
         }
       }
     }

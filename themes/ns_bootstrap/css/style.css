@@ -6424,6 +6424,8 @@ table.report-grid {
       box-shadow: 2px 2px 4px #FF7777; }
     .species-gallery .item-list ul li.status-Off {
       opacity: 0.4; }
+      .species-gallery .item-list ul li.status-Off > div {
+        border-color: red; }
       .species-gallery .item-list ul li.status-Off:before {
         content: "Unpublished"; }
     .species-gallery .item-list ul li .views-field-taxa {
@@ -6440,6 +6442,10 @@ table.report-grid {
   .species-gallery.view-latest-image .item-list ul li img {
     height: auto;
     width: 100%; }
+
+.species-gallery.view-latest-images .item-list ul li img {
+  max-height: 250px;
+  margin: auto; }
 
 .species-gallery.small .item-list ul li img {
   height: 140px; }
@@ -6509,6 +6515,10 @@ table.report-grid {
 #ctrl-wrap-wild_place_hidden {
   display: none; }
 
+#ctrl-wrap-sample-date input {
+  position: relative;
+  z-index: 1000; }
+
 /** Bootstrap tweaks */
 .row-no-padding {
   padding: 0 8px; }
@@ -6526,6 +6536,11 @@ h1 {
 h2 {
   font-size: 20px;
   background: #b9dfcf;
+  padding: 4px; }
+
+h3 {
+  font-size: 18px;
+  background: #e1e1e1;
   padding: 4px; }
 
 .container {
