@@ -21,3 +21,18 @@ naturespot_blocks.menu_create:
   methods: [POST]
   requirements:
     _permission: 'create species content'
+naturespot_blocks.image_organiser:
+  path: 'ns/image-organiser'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::imageOrganiser'
+    _title_callback: '\Drupal\naturespot_blocks\Controller\NsBlockController::getImageOrganiserTitle'
+  requirements:
+    _permission: 'create species content'
+naturespot_blocks.image_organiser_save:
+  path: 'ns/image-organiser-save'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::imageOrganiserSave'
+    _title: 'Image organiser save'
+  methods: [POST]
+  requirements:
+    _permission: 'create species content'

@@ -1,0 +1,4 @@
+imageOrganiser:
+  version: VERSION
+  js:
+    js/image-organiser.js: {}
