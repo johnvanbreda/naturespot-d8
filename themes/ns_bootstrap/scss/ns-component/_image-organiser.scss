@@ -1,0 +1,39 @@
+#image-organiser {
+  li {
+    display: inline-block;
+    list-style-type: none;
+    @include image-panel;
+    vertical-align: top;
+    margin: 8px;
+    border-width: 2px;
+    &.plausible {
+      border: solid red 2px;
+      background: pink;
+    }
+    &.edited {
+      border: dashed pink 2px;
+    }
+  }
+  li.droppable {
+    height: 184px;
+    min-width: 8px;
+    max-width: 80px;
+    padding: 30px 8px 8px 8px;
+    border: dotted silver 2px;
+    background: #FFFAF0;
+    &.ui-state-highlight {
+      border: solid blue 2px;
+    }
+    &.drop-active {
+      background: yellow;
+    }
+  }
+  #images-unused, #images-plausible {
+    li.droppable {
+      display: none;
+      &:first-child {
+        display: inline-block;
+      }
+    }
+  }
+}

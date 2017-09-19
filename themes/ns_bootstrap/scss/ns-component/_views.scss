@@ -35,7 +35,7 @@
         height: 140px;
         margin: auto;
       }
-      &.confidence-Likely > div, &.confidence-Uncertain > div {
+      &.confidence-Likely > div, &.confidence-Uncertain > div, &.confidence-Maybe > div {
         border: solid $alert-colour 1px;
         background-color: lighten($alert-colour, 20%);
         -webkit-box-shadow: 2px 2px 4px $alert-colour;
