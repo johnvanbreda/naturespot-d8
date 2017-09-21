@@ -74,8 +74,9 @@ class NsBlockController extends ControllerBase {
         'description' => $_POST['description'],
         'vid' => $vid,
       );
-      if (!empty($_POST['parent_id']))
+      if (!empty($_POST['parent_id'])) {
         $termData['parent'] = $_POST['parent_id'];
+      }
       Term::create($termData)->save();
     }
     return new RedirectResponse($_POST['redirect']);
@@ -99,8 +100,8 @@ class NsBlockController extends ControllerBase {
     foreach ($nodes as $node) {
       $path = $node->field_file_name->value;
       $nid = $node->id();
-      $isPlausible = (strtolower($node->field_confidence->value) === 'maybe' ? ' plausible' : '');
-      $caption = empty($node->field_comment->value) ? '' : "\n<div>" . $node->field_comment->value. "</div>";
+      $isPlausible = in_array(strtolower($node->field_confidence->value), ['maybe', 'likely']) ? ' plausible' : '';
+      $caption = empty($node->field_comment->value) ? '' : "\n<div>" . $node->field_comment->value . "</div>";
       $editUrl = $node->toUrl('edit-form')->toString();
       $imageHtml = <<<HTML
 <li class="draggable$isPlausible" data-path="$path" data-nid="$nid">
@@ -114,12 +115,15 @@ HTML;
       if ($node->isPublished()) {
         if ($node->field_priority->value === '1' && $node->isPromoted()) {
           $images['priority1'][] = $imageHtml;
-        } elseif ($node->isPromoted()) {
+        }
+        elseif ($node->isPromoted()) {
           $images['main'][] = $imageHtml;
-        } else {
+        }
+        else {
           $images['additional'][] = $imageHtml;
         }
-      } else {
+      }
+      else {
         $images['unused'][] = $imageHtml;
       }
     }
@@ -132,7 +136,7 @@ HTML;
     $warehouseImages = \report_helper::get_report_data(array(
         'dataSource' => 'naturespot/images_to_copy_for_species',
         'readAuth' => $auth,
-        'extraParams' => array('tvk' => $tvk)
+        'extraParams' => array('tvk' => $tvk),
     ));
     foreach ($warehouseImages as $image) {
       $isPlausible = ($image['confidence'] === 'Certain' ? '' : ' plausible');
