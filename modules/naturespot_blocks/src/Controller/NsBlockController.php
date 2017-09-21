@@ -36,6 +36,34 @@ class NsBlockController extends ControllerBase {
     return $this->redirect('entity.node.canonical', ['node' => $nid]);
   }
 
+  public function repatriateImportedRecords() {
+    iform_load_helpers(['data_entry_helper']);
+    $userId = hostsite_get_user_field('indicia_user_id', '');
+    $config = \Drupal::config('iform.settings');
+    $auth = \data_entry_helper::get_read_write_auth($config->get('website_id'), $config->get('password'));
+    $url = $config->get('base_url') . 'index.php/services/data_utils/naturespot_repatriate_imported_records/' . $userId;
+    $session = curl_init();
+    // Set the POST options.
+    curl_setopt($session, CURLOPT_URL, $url);
+    curl_setopt($session, CURLOPT_POSTFIELDS, $auth['write_tokens']);
+    curl_setopt($session, CURLOPT_HEADER, FALSE);
+    curl_setopt($session, CURLOPT_RETURNTRANSFER, TRUE);
+    // Do the POST and then close the session.
+    $response = curl_exec($session);
+    $httpCode = curl_getinfo($session, CURLINFO_HTTP_CODE);
+    $curlErrno = curl_errno($session);
+    if ($httpCode !== 200) {
+      drupal_set_message('Record ownership tidy failed: ' . var_export($response, TRUE), 'error');
+    }
+    else {
+      $output = json_decode($response);
+      $affected = $output[0]->repatriate_imported_records;
+      $recordsWere = $affected === 1 ? 'record was' : 'records were';
+      drupal_set_message("Record ownership tidy complete. $affected $recordsWere tidied.");
+    }
+    return new RedirectResponse('/import-tidy');
+  }
+
   private function taxonomyCreate($vid) {
     if (empty($_POST['taxon']) || empty($_POST['redirect'])) {
       \Drupal::logger('naturespot_blocks')->error('Invalid call to taxonomyCreate');
@@ -60,7 +88,7 @@ class NsBlockController extends ControllerBase {
   public function menuCreate() {
     return $this->taxonomyCreate('menu');
   }
-  
+
   private function getImagesFromLinkNodes($speciesTid, &$images) {
     $nids = \Drupal::entityQuery('node')
       ->condition('type', 'image_link')
@@ -81,7 +109,7 @@ class NsBlockController extends ControllerBase {
 </a>$caption
  <div class="links"><a href="$editUrl">edit</a></div>
 </li>
-<li class="droppable"></li>           
+<li class="droppable"></li>
 HTML;
       if ($node->isPublished()) {
         if ($node->field_priority->value === '1' && $node->isPromoted()) {
@@ -96,7 +124,7 @@ HTML;
       }
     }
   }
-  
+
   private function getImagesFromWarehouse($speciesTid, &$images, $tvk) {
     iform_load_helpers(['report_helper']);
     $config = \Drupal::config('iform.settings');
@@ -211,7 +239,7 @@ HTML;
     $build['#attached']['library'][] = 'naturespot_blocks/imageOrganiser';
     return $build;
   }
-  
+
   private function updateNodeImage($image, $priority, $published, $promoted, $auth) {
     if (isset($image['nid'])) {
       $node = entity_load('node', $image['nid']);
@@ -264,19 +292,19 @@ HTML;
       $response = \data_entry_helper::forward_post_to('occurrence_image', $submission, array_merge($auth['write_tokens']));
       \Drupal::logger('naturespot_blocks')->notice('Submitting to warehouse (copied to Drupal): ' . var_export($submission, true));
     }
-    if ((int)$node->field_priority->value !== (int)$priority || 
+    if ((int)$node->field_priority->value !== (int)$priority ||
         $node->isPublished() !== $published || $node->isPromoted() !== $promoted) {
       $node->field_priority->value = $priority;
       $node->setPublished($published);
       $node->setPromoted($promoted);
       $node->save();
-      \Drupal::logger('naturespot_blocks')->notice("Set node $image[nid] to promoted:" . var_export($promoted, true) . 
+      \Drupal::logger('naturespot_blocks')->notice("Set node $image[nid] to promoted:" . var_export($promoted, true) .
           ", published:" . var_export($published, true) .", priority: " . var_export($priority, true));
-      \Drupal::logger('naturespot_blocks')->notice("Original values - promoted:" . var_export($node->isPromoted(), true) . 
+      \Drupal::logger('naturespot_blocks')->notice("Original values - promoted:" . var_export($node->isPromoted(), true) .
           " published:" . var_export($node->isPublished(), true) . " priority: " . var_export($node->field_priority->value, true));
     }
   }
-  
+
   /**
    * Updates the state of a node image or warehouse image so that it is only stored on the warehouse and not linked
    * to Drupal any more.
@@ -302,16 +330,16 @@ HTML;
             'exclude_copied' => 0
         )
       ));
-      $wid = $warehouseImages[0]['id'];    
+      $wid = $warehouseImages[0]['id'];
       \Drupal::logger('naturespot_blocks')->notice('Deleting node ' . $image['nid']);
-      
+
       /* IF leaving nodes in Drupal unpublished */
       // unpublish the unwanted node
       $imageNode = entity_load('node', $image['nid']);
       $imageNode->setPublished(false);
       $imageNode->setPromoted(false);
       $imageNode->save();
-      
+
       /* ELSEIF deleting nodes (conflicts with cron) *
       entity_delete_multiple('node', [$image['nid']]);
       $config = \Drupal::config('iform.settings');
@@ -326,7 +354,7 @@ HTML;
        */
     }
   }
-  
+
   public function imageOrganiserSave() {
     if (empty($_POST['data']) || empty($_POST['speciesTid'])) {
       return new JsonResponse(array(error => 'Data not valid'));
@@ -339,7 +367,7 @@ HTML;
       'priority1' => [],
       'main' => [],
       'additional' => [],
-      'unused' => [] 
+      'unused' => []
     ), $_POST['data']);
     \Drupal::logger('naturespot_blocks')->notice('Data: ' . var_export(array_keys($data), true));
     foreach($data['priority1'] as $idx => $image) {
@@ -356,7 +384,7 @@ HTML;
     }
     return new JsonResponse(array('msg' => 'OK'));
   }
-  
+
   public function getImageOrganiserTitle() {
     $nids = \Drupal::entityQuery('node')
         ->condition('type', 'species')
