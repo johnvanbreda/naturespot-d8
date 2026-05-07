@@ -37,7 +37,6 @@ jQuery(document).ready(function($) {
   $('.idc-recordDetails').before('<div id="recording-advice" class="alert alert-info"></div>');
 
   indiciaFns.on('click', '#records-grid tbody', {}, function (evt) {
-    indiciaData.mainTaxonListId = 8;
     var tvk = $(evt.target).closest('tr').find('.col-1').data('tvk');
     if (tvk.match(/^[A-Z0-9]{16}$/)) {
       $.ajax({
