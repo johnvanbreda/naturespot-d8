@@ -1,0 +1,13 @@
+table mark {
+  padding: 4px 6px;
+  margin: 4px;
+  font-weight: bold;
+  border: solid silver 1px;
+  border-radius: 8px;
+  background-color: #7570b3;
+  color: #eee;
+  white-space: nowrap;
+}
+table mark.new-for-year {
+  background-color: #1b9e77;
+}

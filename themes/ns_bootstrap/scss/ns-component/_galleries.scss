@@ -1,0 +1,94 @@
+#latest-images {
+  tbody {
+    td > div {
+      @include image-panel;
+    }
+  }
+}
+#latest-image > div {
+  @include image-panel;
+}
+
+.path-photo-of-the-month {
+  form.views-exposed-form {
+    padding-top: 15px;
+  }
+  .item-list {
+    li {
+      max-width: 23%;
+    }
+  }
+  [data-drupal-selector="edit-field-iom-winner-value"] {
+    legend {
+      display: none;
+    }
+    .fieldset-wrapper {
+      margin-bottom: 8px;
+      input {
+        margin: 4px 4px 6px 8px
+      }
+    }
+  }
+}
+
+.views-field-field-file-name img {
+  position: relative;
+  min-width: 160px;
+  min-height: 180px;
+
+  &:after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 160px;
+    height: 180px;
+    border:solid silver 1px;
+    background: url("/themes/ns_bootstrap/images/image-needed-bg.jpg");
+    font-weight: bold;
+    font-size: 20px;
+    color: #222;
+    line-height: 2;
+    text-align: center;
+    padding-top: 72px;
+    content: 'Image wanted';
+  }
+}
+
+/* Gallery page width */
+@media (min-width: 1200px) {
+  .path-taxonomy .main-container {
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+@media (min-width: 1400px) {
+  .path-taxonomy #banner {
+     padding: 0 100px;
+  }
+}
+@media (min-width: 1600px) {
+  .path-taxonomy #banner {
+    padding: 0 200px;
+  }
+}
+@media (min-width: 1800px) {
+  .path-taxonomy #banner {
+    padding: 0 300px;
+  }
+}
+/* Improve visibility of Fancybox buttons */
+div.fancybox-is-open {
+  div.fancybox-bg {
+    opacity: 0.8;
+  }
+  button.fancybox-button {
+    width: 60px;
+    height: 60px;
+  }
+  .fancybox-navigation button.fancybox-button {
+    width: 130px;
+    height: 130px;
+  }
+}

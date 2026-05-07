@@ -1,0 +1,19 @@
+form .form-control {
+  width: auto;
+  display: initial;
+}
+
+textarea.form-control, #imp-location\:name {
+  height: auto;
+  width: 360px;
+}
+
+.species-grid td.scOccAttrCell {
+  position: relative;
+}
+
+.species-grid td.scOccAttrCell span.deh-required {
+  position: absolute;
+  top: 0;
+  right: 2px;
+}

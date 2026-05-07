@@ -1,0 +1,8 @@
+name: NatureSpot blocks
+description: Various blocks for use in NatureSpot.
+version: "8.x-2.0"
+core_version_requirement: ^10
+package: "NatureSpot"
+type: module
+dependencies:
+  - iform

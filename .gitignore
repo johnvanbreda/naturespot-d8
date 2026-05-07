@@ -1,0 +1,5 @@
+.DS_Store
+themes/ns_bootstrap/.sass-cache/*
+themes/ns_bootstrap/bootstrap
+files/indicia/cache
+files/indicia/upload

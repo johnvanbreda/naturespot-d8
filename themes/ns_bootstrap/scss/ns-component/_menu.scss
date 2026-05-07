@@ -1,0 +1,107 @@
+#block-hierarchicaltaxonomymenu {
+  li {
+    list-style-type: none;
+  }
+  i {
+    opacity: 0.2;
+  }
+  .block-taxonomymenu__submenu {
+    padding-left: 10px;
+    font-size: 12px;
+  }
+  .menu-item--active ul.menu.block-taxonomymenu__submenu.collapsed-submenu {
+    display: block;
+  }
+  .menu-item--active >a, .active > a {
+    font-weight: bold;
+  }
+}
+/* Standardise menu links and drop-down headers */
+.navbar-nav > li {
+  > a, > span {
+    padding: 14px;
+    margin: 0;
+    line-height: 20px;
+    display: block;
+  }
+  .navbar-nav {
+    /* Fix sub-menus on mobile menu version not being indented enough. */
+    margin-left: 0;
+  }
+  &.dropdown li {
+    float: none;
+  }
+}
+/* Styling just for the top level menu items. */
+.container-fluid {
+  div > .navbar-nav {
+    float: none;
+    margin: auto;
+    display: table;
+    > li > span {
+      /* Buttonise */
+      font-size: 120%;
+      font-weight: bold;
+      border: solid rgb(166, 164, 232) 2px;
+      border-radius: 4px;
+      margin: 4px 8px;
+      background-color: rgb(240, 240, 240);
+    }
+  }
+}
+/* Enable hover to open for dropdown menus on larger screens */
+@media (min-width: 768px) {
+  html:not(.touch) .navbar-nav > li.dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+}
+
+/* Force navbar to stay collapsed at all widths */
+.navbar-always-collapse {
+  .navbar-collapse {
+    &.collapse {
+      /* Undo the standard way of hiding the menu in bootstrap */
+      display: block;
+      nav {
+        display: none !important;
+      }
+    }
+    &.collapse.in, &.collapsing {
+      nav {
+        display: block !important;
+        float: right;
+      }
+    }
+  }
+
+  /* Keep hamburger button visible at all widths */
+  .navbar-toggle {
+    display: block;
+  }
+
+  /* Tidy menu under hamburger when expanded */
+  .navbar-nav {
+    clear: left;
+    > li {
+      float: none;
+    }
+  }
+
+  /* Right align secondary menu hamburger */
+  .navbar-header {
+    float: right;
+  }
+
+  /* Search in secondary menu area */
+  .region-navigation-collapsible {
+    section {
+      display: flex;
+      height: 50px;
+      align-items: center;
+      form {
+        width: 300px;
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+}

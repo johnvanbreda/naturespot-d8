@@ -1,0 +1,99 @@
+naturespot_blocks.species_by_key:
+  path: 'species_by_key'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::speciesByKey'
+    _title: 'Species by key'
+  requirements:
+    _permission: 'access content'
+naturespot_blocks.image_edit_by_file:
+  path: 'image_edit_by_file'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::imageEditByFile'
+    _title: 'Image edit by file'
+  requirements:
+    _permission: 'create species content'
+naturespot_blocks.species_recording_advice:
+  path: 'species_recording_advice'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::speciesRecordingAdvice'
+    _title: 'Species recording advice'
+  requirements:
+    _permission: 'logged in'
+naturespot_blocks.species_rag:
+  path: 'species_rag'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::speciesRag'
+    _title: 'Species RAG icon'
+  requirements:
+    _permission: 'logged in'
+  options:
+    no_cache: 'TRUE'
+naturespot_blocks.taxon_create:
+  path: 'ns/taxon-create'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::taxonCreate'
+    _title: 'Taxon create'
+  methods: [POST]
+  requirements:
+    _permission: 'create species content'
+naturespot_blocks.menu_create:
+  path: 'ns/menu-create'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::menuCreate'
+    _title: 'Menu create'
+  methods: [POST]
+  requirements:
+    _permission: 'create species content'
+naturespot_blocks.image_organiser:
+  path: 'ns/image-organiser'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::imageOrganiser'
+    _title_callback: '\Drupal\naturespot_blocks\Controller\NsBlockController::getImageOrganiserTitle'
+  requirements:
+    _permission: 'create image_link content'
+  options:
+    no_cache: 'TRUE'
+naturespot_blocks.image_organiser_save:
+  path: 'ns/image-organiser-save'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::imageOrganiserSave'
+    _title: 'Image organiser save'
+  methods: [POST]
+  requirements:
+    _permission: 'create image_link content'
+naturespot_blocks.repatriate_imported_records:
+  path: 'ns/repatriate-imported-records'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::repatriateImportedRecords'
+    _title: 'Repatriate imported records'
+  methods: [POST]
+  requirements:
+    _permission: 'indicia_data_admin'
+naturespot_blocks.update_tvks:
+  path: '/update-tvks'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsUpdateTvks::upload'
+    _title: 'Update TVKs from CSV'
+  requirements:
+    _permission: 'indicia_data_admin'
+naturespot_blocks.100_species_settings:
+  path: '/admin/config/100_species/settings'
+  defaults:
+    _form: '\Drupal\naturespot_blocks\Form\Species100SettingsForm'
+    _title: '100 Species settings'
+  requirements:
+    _permission: 'indicia_data_admin'
+naturespot_blocks.update_warehouse_image_paths:
+  path: '/update-warehouse-image-paths'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsUpdateWarehouseImagePaths::upload'
+    _title: 'Update warehouse image paths from CSV'
+  requirements:
+    _permission: 'indicia_data_admin'
+naturespot_blocks.explore_project:
+  path: '/projects/explore/{title}'
+  defaults:
+    _controller: '\Drupal\naturespot_blocks\Controller\NsBlockController::exploreProjectFromTitle'
+    _title: 'Explore project'
+  requirements:
+    _permission: 'access content'

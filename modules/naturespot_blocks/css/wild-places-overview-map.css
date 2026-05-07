@@ -1,0 +1,22 @@
+.form-item-title-exact {
+  display: none !important;
+}
+.field--name-node-title {
+  font-size: 130%;
+}
+.field--name-body {
+  margin-bottom: 15px;
+}
+.view-wild-places .form-item label.control-label {
+  width: auto;
+}
+.form--inline.form-inline.clearfix select {
+  font-size: 11px;
+  padding: 4px 2em 4px 4px;
+}
+.view-wild-places .form-item {
+  padding: 15px 4px;
+}
+.form-actions button.btn {
+  margin-right: 0;
+}

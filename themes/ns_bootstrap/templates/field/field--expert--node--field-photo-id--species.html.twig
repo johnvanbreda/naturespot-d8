@@ -1,0 +1,56 @@
+{#
+/**
+ * @file
+ * Template to provide expert HTML for the field.
+ *
+ * Available variables:
+ * - element: The field element.
+ * - label: The label of the field.
+ * - settings: The settings for the field.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ */
+#}
+
+{% for item in items %}
+  {% set value = item.content["#text"]|striptags|trim %}
+  {% if value == "G" %}
+    {% set colour = "green" %}
+    {% set title = "Common and easily identified." %}
+  {% elseif value == "A" %}
+    {% set colour = "amber" %}
+    {% set title = "Identifiable with care and/or uncommon." %}
+  {% elseif value == "R" %}
+    {% set colour = "red" %}
+    {% set title = "Requires detailed examination to identify and/or scarce." %}
+  {% else %}
+    {% set complex = true %}
+    {% set value = item.content["#text"]|trim|replace({
+        '[G]' :
+        '<a href="#idPagePath#"><img src="#path#/PhotoID_green.jpg" width="32" height="20" title="Common and easily identified. Click for more info." /></a>',
+        '[A]' :
+        '<a href="#idPagePath#"><img src="#path#/PhotoID_amber.jpg" width="32" height="20" title="Identifiable with care and/or uncommon. Click for more info." /></a>',
+        '[R]' :
+        '<a href="#idPagePath#"><img src="#path#/PhotoID_red.jpg" width="32" height="20" title="Requires detailed examination to identify and/or scarce. Click for more info." /></a>'
+       })
+    %}
+    {%
+       set value = value|replace({
+        '#path#' : url('<front>')|render ~ 'sites/default/files/upload',
+        '#idPagePath' : url('<front>')|render ~ 'content/ID_difficulty'
+       })
+    %}
+  {%  endif %}
+  <div class="field row">
+    <div class="col-md-3 field-label-inline">{{ label }}</div>
+    <div class="col-md-9">
+      {% if complex is defined %}
+        {{ value|raw }}
+      {% else %}
+        <a href="{{ url('<front>') }}content/ID_difficulty"><img src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" width="32" height="20"
+              title="{{ title }} Click for more info." /></a>
+      {% endif %}
+    </div>
+  </div>
+{%  endfor %}

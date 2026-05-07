@@ -1,0 +1,110 @@
+.dl-horizontal {
+  font-size: 20px;
+  margin-left: 30px;
+}
+.dl-horizontal .main-total {
+  font-size: 30px;
+  margin-left: 0;
+}
+.plausible-data-row {
+  display: none;
+}
+@media (min-width: 768px) {
+  .panel-body .dl-horizontal dt {
+    width: 400px;
+  }
+  .panel-body .dl-horizontal dd {
+    margin-left: 420px;
+  }
+}
+.records-row td, span.records-row {
+  color: #8c510a;
+}
+.species-row td, span.species-row {
+  color: #5ab4ac;
+  font-size: italic;
+}
+.totals {
+  font-weight: bold;
+  background: #fafaf7;
+}
+tbody th {
+  border-right: solid #f7f7f7 1px;
+  background: #f0f0f0;
+}
+thead tr {
+  background: #003333;
+  color: #eee;
+}
+table.es-data-grid thead tr.es-filter-row input {
+  color: #555;
+}
+
+/* Species 100 tab */
+.chart-gauge {
+  width: 400px;
+  margin: 100px auto
+}
+.chart-filled {
+  fill: steelblue;
+}
+.chart-empty {
+  fill: #dedede;
+}
+.needle, .needle-center {
+  fill: #464A4F;
+}
+svg {
+  font: 10px sans-serif;
+}
+.big {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+table.species-100 > thead > tr > th, table.species-100 > tbody > tr > th {
+  border: solid white 2px;
+}
+table.species-100 thead th {
+  font-size: 120%;
+  background-color: #767A7F;
+  color: white;
+}
+table.species-100 tbody th {
+  background-color: #cccccc;
+}
+table.species-100 > tbody > tr > td {
+  border: solid white 2px;
+  background: #f5f5f7;
+}
+table.species-100 td.species-value, table.species-100 td.group-value {
+  font-weight: strong;
+  color: darkgreen;
+  text-align: center;
+  font-size: 125%;
+  padding: 6px 6px 0;
+  background: #e2e2e4;
+}
+table.species-100 td.scores {
+  background: #ceface;
+  color: darkgreen;
+  font-weight: bold;
+}
+table.species-100 .numeric span {
+  display: block;
+  width: 20px;
+  margin: auto;
+  text-align: right;
+}
+.panel.gauges .panel-heading {
+  padding: 0;
+}
+.panel.gauges h2 {
+  font-size: 22px;
+  margin: 0;
+}
+.panel.gauges h3 {
+  font-size: 18px;
+  margin: 0;
+}

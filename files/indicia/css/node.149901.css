@@ -1,0 +1,8 @@
+textarea {
+  width: 100%;
+}
+.record-details-fields span:first-child {
+  font-weight: bold;
+  min-width: 150px;
+  display: inline-block;
+}

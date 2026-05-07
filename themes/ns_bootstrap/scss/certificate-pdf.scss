@@ -1,0 +1,135 @@
+$color-ns-green: #7d973f;
+$color-ns-blue: #2121c2;
+$color-cert-light-blue: #8ce5e3;
+$color-cert-orange: #c45911;
+$color-cert-green: #5d8576;
+$color-cert-cream: #feedbf;
+
+@font-face {
+  font-family: 'Parchment MF';
+  font-variant: normal;
+  font-weight: bold;
+  src: url("/themes/ns_bootstrap/fonts/ParchmentMf-Vqge.ttf") format("truetype");
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+article {
+  > h2 {
+    /* Hide the main title */
+    display: none;
+  }
+  .certificate-wrap {
+    position: relative;
+    text-align: center;
+  }
+  .inset {
+    position: absolute;
+    left: 25%;
+    top: 51%;
+    transform: translate(-50%, -50%);
+    border: solid $color-ns-green 2px;
+    width: 260px;
+    height: 260px;
+    border-radius: 130px;
+    background: $color-cert-light-blue;
+    span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: block;
+      text-align: center;
+      width: 180px;
+      font-size: 13px;
+    }
+  }
+  /* Basic grid */
+  .row {
+    display: table;
+    width: 100%;
+  }
+  .col-md-3 {
+    width: 25%;
+    display: table-cell;
+  }
+  .col-md-9 {
+    width: 75%;
+    display: table-cell;
+  }
+  .left-col {
+    background-color: $color-ns-green;
+    color: $color-ns-blue;
+    font-family: "Parchment MF", sans-serif;
+    position: relative;
+    img, span {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+    }
+    span {
+      font-size: 65px;
+      bottom: 80px;
+    }
+    img {
+      bottom: 0;
+    }
+  }
+  .right-col {
+    background-color: $color-cert-cream;
+    h1 {
+      font-family: "Parchment MF", sans-serif;
+      margin-top: 40px;
+      span {
+        display: block;
+        width: auto;
+        margin: auto;
+        color: $color-cert-orange;
+        text-transform: uppercase;
+        line-height: 0.60em;
+        &:first-child {
+          font-size: 70px;
+        }
+        &:nth-child(2) {
+          font-size: 140px;
+          color: $color-cert-green;
+          font-weight: bold;
+        }
+        &:last-child {
+          font-size: 125px;
+          font-weight: bold;
+        }
+      }
+    }
+    .achievement {
+      font-weight: bold;
+      width: 70%;
+      margin: 20px auto 30px;
+      color: $color-cert-green;
+    }
+    .person {
+      font-size: 40px;
+    }
+    .signature-wrap {
+      padding-top: 30px;
+      p:last-child {
+        color: #777;
+        font-size: 90%;
+      }
+    }
+    .footer {
+      margin-top: 33px;
+      img {
+        width: 100%;
+      }
+      .col-md-3 {
+        font-size: 12px;
+        padding: 8px;
+      }
+    }
+  }
+}

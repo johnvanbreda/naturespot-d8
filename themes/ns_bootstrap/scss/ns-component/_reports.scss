@@ -1,0 +1,32 @@
+table.report-grid, table.species-gallery {
+  width: 100%;
+  .pager {
+    margin: 0;
+  }
+}
+
+/* Fix a bug where loading spinner not hidden on My Records page */
+div.loading-spinner {
+  display: none;
+}
+
+#my-records-params {
+  .form-row {
+    padding-right: $gap*4;
+    * {
+      vertical-align: middle;
+    }
+  }
+  input[type="submit"] {
+    display: inline-block
+  }
+}
+
+@media (min-width: $screen-md-min) {
+  #my-records-params {
+    .form-row {
+      float: left;
+      width: 50%;
+    }
+  }
+}

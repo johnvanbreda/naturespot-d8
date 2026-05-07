@@ -1,0 +1,55 @@
+{% set title %}
+  {{ content.title }}
+{% endset %}
+{% set latin %}
+  {{ content.latin }}
+{% endset %}
+{% set tab3 %}
+  {{ content.tab3 }}
+{% endset %}
+<div class="row">
+  <div class="col-md-12">
+    {% if title|striptags|trim == latin|striptags|trim %}
+      <h1><em>{{ title }}</em></h1>
+    {% else %}
+      <h1>{{ title }} - <em>{{ latin }}</em></h1>
+    {% endif %}
+  </div>
+</div>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#tab1">Species account</a></li>
+    <li><a data-toggle="tab" href="#tab2">Additional images</a></li>
+    {% if tab3|striptags|trim %}
+    <li><a data-toggle="tab" href="#tab3">Association species</a></li>
+    {% endif %}
+</ul>
+
+<div class="tab-content">
+  <div id="tab1" class="tab-pane fade in active">
+    <div class="row">
+      <div class="col-md-12">{{ content.tab1 }}</div>
+    </div>
+    <div clas="row">
+      <div class="col-md-7">
+        <h2>Leicestershire & Rutland Map</h2>
+        {{ drupal_plugin_block('ns_species_vc_map_block', false) }}
+        {{ content.tab1bottomleft }}
+      </div>
+      <div class="col-md-5">{{ content.tab1bottomright }}</div>
+    </div>
+    <div clas="row">
+      <div class="col-md-12">
+        {{ content.tab1footer }}
+      </div>
+    </div>
+  </div>
+  <div id="tab2" class="tab-pane fade">
+    {{ content.tab2 }}
+  </div>
+  {% if tab3|striptags|trim %}
+    <div id="tab3" class="tab-pane fade">
+      {{ content.tab3 }}
+    </div>
+  {% endif %}
+</div>

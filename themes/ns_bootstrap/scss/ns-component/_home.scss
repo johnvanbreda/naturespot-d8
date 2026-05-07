@@ -1,0 +1,38 @@
+.path-frontpage {
+  .col-lg-5.bs-region {
+    width: 50%;
+  }
+  .bs-region--left, .bs-region--middle {
+    h2:first-child {
+      margin: 0;
+    }
+  }
+  .bs-region--right {
+    font-size: 90%;
+    > .field {
+      margin: $gap 0;
+      padding: $gap 0;
+      border-bottom: 1px solid $light-outline;
+      &.field--name-dynamic-block-fieldnode-follow-us p {
+        font-size: 0; /* prevent whitespace breaking layout */
+        a {
+          width: 33%;
+          display: inline-block;
+        }
+      }
+    }
+  }
+  #latest-image > div:first-child {
+    margin-bottom: 8px;
+  }
+  a em, .more-link {
+    font-weight: bold;
+    font-style: normal;
+    text-decoration: underline;
+    text-decoration-color: #23527c;
+  }
+}
+
+.field--name-dynamic-block-fieldnode-partners {
+  margin-top: $gap;
+}

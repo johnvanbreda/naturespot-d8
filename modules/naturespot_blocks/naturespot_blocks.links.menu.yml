@@ -1,0 +1,6 @@
+naturespot_blocks.100_species_settings:
+  title: '100 Species settings'
+  description: 'Settings page for the 100 Species project'
+  parent: iform.admin_config_iform
+  route_name: naturespot_blocks.100_species_settings
+  weight: 50

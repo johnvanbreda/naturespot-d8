@@ -1,0 +1,43 @@
+/* Species page */
+.page-node-type-species {
+  #tab1 {
+    .col-md-12 {
+      div.field {
+        border-bottom: solid 1px $dark-outline;
+        padding: 8px 0;
+        div.field {
+          border-bottom: none;
+          padding: none;
+        }
+      }
+    }
+    #photo-cards {
+      li.field-\#status-icons\# {
+        float: right;
+      }
+    }
+  }
+  #tab3 {
+    .views-row {
+      margin-bottom: 15px;
+    }
+    h3 {
+      background: none;
+      margin-bottom: 4px;
+      padding-top: 4px;
+      padding-left: 0;
+      margin-top: 0;
+      border-top: solid silver 1px;
+    }
+    .main-img {
+      img {
+        width: 100%;
+        max-height: 240px;
+        object-fit: cover;
+      }
+    }
+  }
+  .expand-card, .collapse-card {
+    display: none;
+  }
+}

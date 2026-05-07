@@ -1,0 +1,19 @@
+#data-profile .panel-heading {
+  padding: 0;
+}
+#data-profile h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+#data-profile h2 a {
+  color: rgb(51, 51, 51);
+}
+#data-profile h2 .badge {
+  background-color: #337ab7;
+}
+@media (min-width: 768px) {
+  #data-profile dl.dl-horizontal dt {
+    width: 220px;
+    margin-right: 8px;
+  }
+}

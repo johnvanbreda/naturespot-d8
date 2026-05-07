@@ -1,0 +1,61 @@
+imageOrganiser:
+  version: VERSION
+  js:
+    js/image-organiser.js: {}
+  css:
+    component:
+      css/image-organiser.css: {}
+      https://use.fontawesome.com/releases/v5.7.2/css/all.css: { type: external, minified: true }
+wildPlacesOverviewMap:
+  version: VERSION
+  js:
+    js/wild-places-overview-map.js: {}
+  css:
+    component:
+      css/wild-places-overview-map.css: {}
+fullOpenLayers:
+  version: VERSION
+  js:
+    ../iform/media/js/OpenLayers-min.js: {}
+    ../iform/media/js/proj4js.js: {}
+    ../iform/media/js/proj4defs.js: {}
+    ../iform/media/js/lang/en.js: {}
+    ../iform/media/js/jquery.indiciaMapPanel.js: {}
+es-blocks:
+  version: VERSION
+  js:
+    js/es-blocks.js: {}
+  css:
+    component:
+      css/es-blocks.css: {}
+  dependencies:
+    - iform/base
+    - iform/datacomponents
+printPdf:
+  version: VERSION
+  js:
+    ../iform/client_helpers/prebuilt_forms/extensions/print.js: {}
+  css:
+    component:
+      ../iform/client_helpers/prebuilt_forms/extensions/print.css: {}
+  dependencies:
+    - iform/base
+    - iform/indiciaFns
+    - iform/html2pdf
+    - iform/fancybox
+species-data-stats:
+  version: VERSION
+  js:
+    js/species-data-stats.js: {}
+  css:
+    component:
+      css/species-data-stats.css: {}
+placeSpeciesTab:
+  version: VERSION
+  js:
+    js/bootstrapSwitch.js: {}
+    js/place-species-tab.js: {}
+  css:
+    component:
+      css/bootstrapSwitch.css: {}
+      css/place-species-tab.css: {}

@@ -1,0 +1,498 @@
+<?php
+
+use Drupal\views\Views;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\user\Entity\User;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+
+define('NS_GRANT_ALL', 51);
+
+function naturespot_blocks_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (isset($form['#id']) && $form['#id'] == 'views-exposed-form-image-of-the-month-candidates-page-1') {
+    $options = [
+      'all' => t('- All -'),
+    ];
+    $year = date('Y');
+    $month = date('m');
+    for ($i = 0; $i < 12; $i++) {
+      $month = str_pad($month, 2, '0', STR_PAD_LEFT);
+      $options["$year$month"] = "$month/$year";
+      $month--;
+      if ($month === 0) {
+        $month = 12;
+        $year--;
+      }
+      if ($year == 2023 && $month < 7) {
+        break;
+      }
+    }
+
+    $form['month'] = [
+      '#title' => new TranslatableMarkup('Show month'),
+      '#type' => 'select',
+      '#options' => $options,
+      '#size' => NULL,
+      '#default_value' => 'all',
+      '#weight' => -40,
+    ];
+    $form['field_iom_winner_value']['#weight'] = -50;
+
+  }
+}
+
+function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if (in_array($view->id(), ['species_gallery_for_group', 'species_gallery_for_group_photo_linked'])) {
+    $current_path = \Drupal::service('path.current')->getPath();
+    $path_args = explode('/', $current_path);
+    if ($path_args[1] === 'admin' || $path_args[count($path_args) - 1] === 'layout') {
+      // On layout builder, so set a default.
+      $menuTid = 19249;
+    }
+    else {
+      $menuTid = array_pop($path_args);
+    }
+    $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($menuTid);
+    $topMenuTerm = array_pop($parents);
+    $query->addWhereExpression(0,
+      "(taxonomy_term_field_data_node__field_species_library_menu.tid=$menuTid
+      or taxonomy_term_field_data_taxonomy_term__parent.tid=$menuTid
+      or taxonomy_term_field_data_taxonomy_term__parent_1.tid=$menuTid)"
+    );
+    $containerMenuName = $topMenuTerm->name->value;
+    $specialMenuItems = [
+      'Caterpillars' => 'caterpillar',
+      'Galls' => 'gall',
+      'Leaf-mines' => 'leaf_mine',
+      'Nymphs & Larvae' => 'nymph',
+      'Oddities' => 'oddity',
+      'Tracks & Signs' => 'track_or_sign',
+    ];
+    if (isset($specialMenuItems[$containerMenuName])) {
+      $fieldName = $specialMenuItems[$containerMenuName];
+      // Add relationships for filtering to the special gallery, e.g. galls.
+      $configuration = [
+        'type' => 'INNER',
+        'table' => "node__field_$fieldName",
+        'field' => 'entity_id',
+        'left_table' => 'taxa_taxonomy_term_field_data',
+        'left_field' => 'nid',
+        'operator' => '='
+      ];
+      $join = Views::pluginManager('join')->createInstance('standard', $configuration);
+      $query->addRelationship("node__field_$fieldName", $join, 'taxa_taxonomy_term_field_data');
+      $query->addWhere(0, "node__field_{$fieldName}.field_{$fieldName}_value", 1);
+    }
+
+    else {
+      // not caterpillar or gall, so prioritise the top priority images
+      // Add relationships for priority info.
+      $configuration = [
+        'type' => 'INNER',
+        'table' => 'node__field_priority',
+        'field' => 'entity_id',
+        'left_table' => 'taxa_taxonomy_term_field_data',
+        'left_field' => 'nid',
+        'operator' => '='
+      ];
+      $join = Views::pluginManager('join')->createInstance('standard', $configuration);
+      $query->addRelationship('node__field_priority', $join, 'taxa_taxonomy_term_field_data');
+      $query->addWhere(0, 'node__field_priority.field_priority_value', 1);
+    }
+  }
+}
+
+function naturespot_blocks_form_user_login_form_alter(&$form, $form_state) {
+  // Alter login form and add own custom submit handler.
+  $form['#submit'][] = '_naturespot_blocks_user_login_form_submit';
+}
+
+function naturespot_blocks_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $view = $form_state->getStorage('view');
+  if ($form_id === 'views_exposed_form' && $view['view']->id() === 'search_content') {
+    $form['#theme'] = 'views_search_exposed_form';
+  }
+  elseif (($form_id === 'user_form' || $form_id === 'user_register_form')) {
+    // Normal users cannot set their own Species 100 membership.
+    if (!\Drupal::currentUser()->hasPermission('view ns admin page') && !empty($form['field_indicia_100_species_member'])) {
+      $form['field_indicia_100_species_member']['#type'] = 'hidden';
+    }
+  }
+}
+
+/**
+ * Custom submit handler for login form.
+ */
+function _naturespot_blocks_user_login_form_submit($form, $form_state) {
+  // $form_state->setRedirect('<front>', ['query' => ['login' => uniqid()]]);
+}
+
+function naturespot_blocks_node_grants(\Drupal\Core\Session\AccountInterface $account, $op) {
+  $grants = array();
+  if ($account->hasPermission('view ns admin page'))
+    $grants['ns_admin_page_access'] = [NS_GRANT_ALL];
+  return $grants;
+}
+
+/**
+ * Implements hook_node_access_records.
+ * Returns grants required to access a particular iform node.
+ * @param \Drupal\node\NodeInterface $node
+ * @return array
+ */
+function naturespot_blocks_node_access_records(\Drupal\node\NodeInterface $node) {
+  $grants = array();
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'.$node->id());
+  $adminPages = array(
+    '/content/manual',
+    '/content/log-details',
+    '/import-instructions',
+    '/all-species-view',
+    '/content/whos-who'
+  );
+  if (in_array($alias, $adminPages)) {
+    $grants[] = array(
+      'realm' => 'ns_admin_page_access',
+      'gid' => NS_GRANT_ALL,
+      'grant_view' => 1,
+      'grant_update' => 1,
+      'grant_delete' => 1
+    );
+  }
+  return $grants;
+}
+
+/**
+ * Check if user added to the 100 species role and send welcome mail.
+ */
+function naturespot_blocks_user_presave(EntityInterface $account) {
+  $config = \Drupal::config('naturespot_blocks.settings');
+  $rolesBeforeSave = empty($account->original) ? [] : $account->original->getRoles();
+  $rolesAfterSave = $account->getRoles();
+  // Has 100 species role been added?
+  if (!in_array('100_species', $rolesBeforeSave) && in_array('100_species', $rolesAfterSave)) {
+    // Send welcome email.
+    $sendMail = new \Drupal\Core\Mail\Plugin\Mail\PhpMail();
+    $from = \Drupal::config('system.site')->get('mail');
+    $to = $account->getEmail();
+    $message['headers'] = [
+      'content-type' => 'text/html',
+      'MIME-Version' => '1.0',
+      'reply-to' => $from,
+      'from' => 'NatureSpot <'.$from.'>'
+    ];
+    $message['to'] = $to;
+    $tokens = [
+      '{{ first_name }}',
+      '{{ last_name }}',
+    ];
+    $replacements = [
+      $account->field_first_name->value,
+      $account->field_last_name->value,
+    ];
+    $message['subject'] = str_replace($tokens, $replacements, $config->get('species_100_email_subject'));
+    $message['body'] = str_replace($tokens, $replacements, $config->get('species_100_email_body'));
+    if ($sendMail->mail($message)) {
+      \Drupal::messenger()->addMessage('A welcome email has been sent to this user.');
+    }
+    else {
+      \Drupal::messenger()->addError('The welcome email failed to send.');
+    }
+  }
+}
+
+/**
+ * Implementation of hook_cron.
+ * Copies verified image data into Drupal image links.
+ */
+function naturespot_blocks_cron() {
+  naturespot_blocks_check_species_100_achievements();
+  naturespot_blocks_check_image_redets();
+  /*iform_load_helpers(['report_helper']);
+  // Get a list of the images which are for verified records but are not copied to Drupal or rejected.
+  $config = \Drupal::config('iform.settings');
+  $auth = \report_helper::get_read_write_auth($config->get('website_id'), $config->get('password'));
+  $auth['write_tokens']['persist_auth'] = true;
+  $fetchOpts = array(
+    'dataSource'=>'naturespot/images_to_copy',
+    'mode'=>'report',
+    'readAuth' => $auth['read'],
+  );
+  $images = \report_helper::get_report_data($fetchOpts);
+  foreach ($images as $image) {
+    if (empty($image['external_key'])) {
+      continue;
+    }
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', 'species')
+      ->condition('status', 1)
+      ->condition('field_nbn_number', $image['external_key']);
+    $nids = $query->execute();
+    if (count($nids) > 0) {
+      // should only be 1
+      $nid = array_pop($nids);
+      $node = \Drupal\node\Entity\Node::load($nid);
+      $tid = $node->taxa->target_id;
+      $image['priority'] = 8; // default for now
+      // Reformat the date
+      //$image['date'] = date('d F Y', str_replace('/', '-', $image['date']));
+      $image['confidence'] = empty($image['confidence']) ? 'Certain' : $image['confidence'];
+      _add_image_to_db($node, $tid, $image);
+      // Now, mark the image as uploaded in Indicia
+      iform_load_helpers(['data_entry_helper']);
+      $submission = array(
+        'occurrence_image:id' => $image['id'],
+        'occurrence_image:external_details' => 'Copied to Drupal',
+        'website_id' => $config->get('website_id')
+      );
+      $submission = \data_entry_helper::build_submission($submission, array('model' => 'occurrence_image'));
+      $response = \data_entry_helper::forward_post_to('occurrence_image', $submission, array_merge($auth['write_tokens']));
+    }
+  }
+  // Update existing images that don't have their date_sort set.
+    // Get an array of all 'image_link' node ids.
+  $image_nids = \Drupal::entityQuery('node')
+    ->condition('type', 'image_link')
+    ->notExists('field_date_sort')
+    ->sort('nid', 'DESC')
+    ->pager(500)
+    ->execute();
+
+  // Load all the images.
+  $images = Node::loadMultiple($image_nids);
+  foreach ($images as $image) {
+    $date = DateTime::createFromFormat('d F Y', $image->field_date->value);
+    // Some older records had different format.
+    if (!$date) {
+      $date = DateTime::createFromFormat('d/m/Y', $image->field_date->value);
+    }
+    if ($date) {
+      $image->field_date_sort->value = $date->format('Y-m-d');
+      $image->save();
+    }
+    else {
+      \Drupal::logger('naturespot_blocks')->notice('Invalid date for image_link ' . $image->id());
+    }
+  }*/
+}
+
+function naturespot_blocks_check_species_100_achievements() {
+  // Find users who have achieved the goal but not been notified.
+  iform_load_helpers(['report_helper']);
+  $iformConfig = \Drupal::config('iform.settings');
+  $auth = \report_helper::get_read_write_auth($iformConfig->get('website_id'), $iformConfig->get('password'));
+  $fetchOpts = array(
+    'dataSource'=>'projects/naturespot/sp_100/users_achieved',
+    'mode'=>'report',
+    'readAuth' => $auth['read'],
+  );
+  $usersToNotify = \report_helper::get_report_data($fetchOpts);
+  // \Drupal::logger('naturespot_blocks')->info('Users to notify for 100 Species: ' . var_export($usersToNotify, TRUE));
+  if (count($usersToNotify) === 0) {
+    return;
+  }
+  $config = \Drupal::config('naturespot_blocks.settings');
+  $subject = $config->get('species_100_achievement_email_subject');
+  $body = $config->get('species_100_achievement_email_body');
+  if (empty($subject) || empty($body)) {
+    \Drupal::logger('naturespot_blocks')->alert('Species 100 emails not sent as email content not configured.');
+    return;
+  }
+  iform_load_helpers(['data_entry_helper', 'submission_builder']);
+  foreach ($usersToNotify as $userToNotify) {
+    $uids = \Drupal::entityQuery('user')
+      ->condition('field_indicia_user_id', $userToNotify['user_id'])
+      ->accessCheck(FALSE)
+      ->execute();
+    if (count($uids) > 0) {
+      $account = User::load(array_keys($uids)[0]);
+      $sendMail = new \Drupal\Core\Mail\Plugin\Mail\PhpMail();
+      $from = \Drupal::config('system.site')->get('mail');
+      $to = $account->getEmail();
+      $message['headers'] = [
+        'content-type' => 'text/html',
+        'MIME-Version' => '1.0',
+        'reply-to' => $from,
+        'from' => 'NatureSpot <'.$from.'>'
+      ];
+      $message['to'] = $to;
+      $tokens = [
+        '{{ first_name }}',
+        '{{ last_name }}',
+      ];
+      $replacements = [
+        $account->field_first_name->value,
+        $account->field_last_name->value,
+      ];
+      $message['subject'] = str_replace($tokens, $replacements, $subject);
+      $message['body'] = str_replace($tokens, $replacements, $body);
+      \Drupal::logger('naturespot_blocks')->info('Sending ' . json_encode($message));
+      if ($sendMail->mail($message)) {
+        \Drupal::logger('naturespot_blocks')->info('A species 100 achievement email has been sent to ' . $account->getDisplayName());
+      }
+      else {
+        \Drupal::logger('naturespot_blocks')->info('The species 100 achievement email failed to send.');
+      }
+      $submission = [
+        'website_id' => $iformConfig->get('website_id'),
+        'person_id' => $userToNotify['person_id'],
+        'person_attribute_id' => 31,
+        'int_value' => 1,
+      ];
+      $submission = \submission_builder::build_submission($submission, array('model' => 'person_attribute_value'));
+      $response = \data_entry_helper::forward_post_to('person_attribute_value', $submission, array_merge($auth['write_tokens']));
+      if (!isset($response['success'])) {
+        \Drupal::logger('naturespot_blocks')->alert('Failed to set sent flag on warehouse person record for 100 species achievement. ' . var_export($response, TRUE));
+      }
+    }
+  }
+}
+
+/**
+ * Ensures that images for redetted records are re-linked.
+ *
+ * Link images to the correct Species Account in Drupal.
+ */
+function naturespot_blocks_check_image_redets() {
+  // Get last det ID from config (or 0 if never run).
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('naturespot_blocks.settings');
+  $lastDetId = $config->get('last_image_fix_redet_id') ?? 0;
+  \Drupal::logger('naturespot_blocks')->alert("Starting at $lastDetId");
+  // Get list of redets since last processed.
+  iform_load_helpers(['report_helper']);
+  $iformConfig = \Drupal::config('iform.settings');
+  $readAuth = \report_helper::get_read_auth($iformConfig->get('website_id'), $iformConfig->get('password'));
+  $fetchOpts = [
+    'dataSource'=>'projects/naturespot/redetermined_images',
+    'mode'=>'report',
+    'readAuth' => $readAuth,
+    'extraParams' => [
+      'last_det_id' => $lastDetId,
+      'limit' => 200,
+    ],
+  ];
+  $images = \report_helper::get_report_data($fetchOpts);
+  foreach ($images as $image) {
+    //   Find the image link
+    $imageNids = \Drupal::entityQuery('node')
+      ->condition('type', 'image_link')
+      ->condition('field_file_name', $image['image_path'])
+      ->accessCheck(FALSE)
+      ->execute();
+    $imagesNodes = Node::loadMultiple($imageNids);
+    // Go through all images with same filename - though should only be one.
+    foreach ($imagesNodes as $imageNode) {
+      $speciesNids = \Drupal::entityQuery('node')
+        ->condition('type', 'species')
+        ->condition('taxa', $imageNode->taxa->target_id)
+        ->accessCheck(FALSE)
+        ->execute();
+      $speciesNodes = Node::loadMultiple($speciesNids);
+      if (count($speciesNodes) === 1) {
+        foreach ($speciesNodes as $speciesNode) {
+          // If the taxon incorrect.
+          if ($speciesNode->field_nbn_number->value !== $image['is_external_key']) {
+            \Drupal::logger('naturespot_blocks')->alert('Changing image ' . $image['image_path'] . ' for species account ' . $speciesNode->getTitle() .
+              ' from ' . $image['was_external_key'] . ' (' . $speciesNode->field_nbn_number->value .
+              ') to ' . $image['is_external_key']);
+            $linkToRedetSpeciesNids = \Drupal::entityQuery('node')
+              ->condition('type', 'species')
+              ->condition('field_nbn_number', $image['is_external_key'])
+              ->accessCheck(FALSE)
+              ->execute();
+            $linkToRedetSpeciesNodes = Node::loadMultiple($linkToRedetSpeciesNids);
+            if (count($linkToRedetSpeciesNodes) === 1) {
+              foreach ($linkToRedetSpeciesNodes as $linkToRedetSpeciesNode) {
+                \Drupal::logger('naturespot_blocks')->alert('Record ' . $image['occurrence_id'] . ' redetermined to ' . $linkToRedetSpeciesNode->getTitle() . ' which has key ' . $linkToRedetSpeciesNode->field_nbn_number->value);
+                $imageNode->set('taxa', ['target_id' => $linkToRedetSpeciesNode->taxa->target_id]);
+                // Unpublish.
+                $imageNode->setUnpublished();
+                $imageNode->save();
+              }
+            }
+            elseif (count($linkToRedetSpeciesNodes) === 0) {
+              \Drupal::logger('naturespot_blocks')->alert('Missing species found for image redetermination, searching for ' . $image['is_external_key']);
+            }
+            else {
+              \Drupal::logger('naturespot_blocks')->alert('Duplicate species found for image redetermination, searching for ' . $image['is_external_key']);
+            }
+          }
+        }
+      }
+      elseif (count($speciesNodes) > 1) {
+        \Drupal::logger('naturespot_blocks')->alert('Duplicate species found for taxon term ID ' . $imageNode->taxa->target_id);
+      }
+    }
+    $lastDetId = $image['determination_id'];
+  }
+  \Drupal::logger('naturespot_blocks')->alert("Ending at $lastDetId");
+  // Store last det id from processed report output into config.
+  $config->set('last_image_fix_redet_id', $lastDetId);
+  $config->save();
+}
+
+/**
+ * Adds image to Drupal.
+ *
+ * @deprecated
+ *   Cron can be disabled as the image organiser does this.
+ */
+/*function _add_image_to_db($speciesNode, $tid, $image) {
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', 'image_link')
+    ->condition('field_file_name', $image['path'])
+    ->accessCheck(FALSE);
+  $existing = $query->execute();
+  if (empty($existing)) {
+    $speciesNid = $speciesNode->id();
+    // reformat the date
+    $date = $image['date'];
+    $time = strtotime(str_replace('/','-',$date));
+    // Display label
+    $date = date('d F Y', $time);
+    // Date formatted as date for sort.
+    $date_sort = date('Y-m-d', $time);
+    // Create node object with attached file.
+    $node = Node::create([
+      'type' => 'image_link',
+      'status' => 0,
+      'title' => $image['path'],
+      'field_file_name' => [$image['path']],
+      'field_priority' => [$image['priority']],
+      'field_site' => [$image['location_name']],
+      'field_date' => [$date],
+      'field_date_sort' => [$date_sort],
+      'field_recorder' => [$image['recorders']],
+      'field_comment' => [$image['caption']],
+      'field_confidence' => [$image['confidence']],
+      'field_record_id' => [$image['occurrence_id']],
+      'field_moderator' => ['admin'],
+      'taxa' => ['target_id' => $tid],
+    ]);
+    $node->save();
+    return true;
+  } else {
+    return false;
+  }
+}*/
+
+function naturespot_blocks_node_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity,
+        \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  $bundle = $entity->bundle();
+  if ($bundle === 'certificate') {
+    $user = User::load(\Drupal::currentUser()->id());
+    if ($user->hasPermission('100-species')) {
+      // Update the user's name in the output.
+      $build['body'][0]['#text'] = str_replace('{{ name }}', $user->field_first_name->value . ' ' . $user->field_last_name->value, $build['body'][0]['#text']);
+    }
+    else {
+      $build['body'][0]['#text'] = '<div class="alert alert-danger">Unauthorised</div>';
+    }
+  }
+
+}

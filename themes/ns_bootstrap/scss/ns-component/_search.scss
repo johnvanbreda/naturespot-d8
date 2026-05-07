@@ -1,0 +1,11 @@
+.view-search-content {
+  .row {
+    margin-bottom: $gap * 2;
+  }
+}
+#views-exposed-form-search-content-page-1 {
+  margin-bottom: $gap;
+  input {
+    margin: 0;
+  }
+}

@@ -1,0 +1,7 @@
+input#location\:name {
+  width: 280px;
+}
+
+textarea#location\:comment {
+  width: 550px;
+}

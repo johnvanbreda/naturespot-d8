@@ -1,0 +1,137 @@
+@font-face {
+  font-family: "Parchment MF";
+  font-variant: normal;
+  font-weight: bold;
+  src: url("/themes/ns_bootstrap/fonts/ParchmentMf-Vqge.ttf") format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+}
+
+article {
+  /* Basic grid */
+}
+article > h2 {
+  /* Hide the main title */
+  display: none;
+}
+article .certificate-wrap {
+  position: relative;
+  text-align: center;
+}
+article .inset {
+  position: absolute;
+  left: 25%;
+  top: 51%;
+  transform: translate(-50%, -50%);
+  border: solid #7d973f 2px;
+  width: 260px;
+  height: 260px;
+  border-radius: 130px;
+  background: #8ce5e3;
+}
+article .inset span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  text-align: center;
+  width: 180px;
+  font-size: 13px;
+}
+article .row {
+  display: table;
+  width: 100%;
+}
+article .col-md-3 {
+  width: 25%;
+  display: table-cell;
+}
+article .col-md-9 {
+  width: 75%;
+  display: table-cell;
+}
+article .left-col {
+  background-color: #7d973f;
+  color: #2121c2;
+  position: relative;
+}
+article .left-col img, article .left-col span {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+article .left-col span {
+  font-size: 45px;
+  /* 65 */
+  bottom: 115px;
+  font-family: "Parchment MF", sans-serif;
+}
+article .left-col img {
+  bottom: 0;
+}
+article .right-col {
+  background-color: #feedbf;
+}
+article .right-col h1 {
+  font-family: "Parchment MF", sans-serif;
+  margin-top: 40px;
+}
+article .right-col h1 span {
+  display: block;
+  width: auto;
+  margin: auto;
+  color: #c45911;
+  text-transform: uppercase;
+  line-height: 0.6em;
+}
+article .right-col h1 span:first-child {
+  font-size: 70px;
+}
+article .right-col h1 span:nth-child(2) {
+  font-size: 140px;
+  color: #5d8576;
+  font-weight: bold;
+}
+article .right-col h1 span:last-child {
+  font-size: 125px;
+  font-weight: bold;
+}
+article .right-col .achievement {
+  font-weight: bold;
+  width: 70%;
+  margin: 20px auto 30px;
+  color: #5d8576;
+}
+article .right-col .person {
+  font-size: 40px;
+}
+article .right-col .signature-wrap {
+  padding-top: 10px;
+}
+article .right-col .signature-wrap #signature-image {
+  height: 90px;
+}
+article .right-col .signature-wrap p:last-child {
+  color: #777;
+  font-size: 90%;
+}
+article .right-col .footer {
+  margin-top: 33px;
+}
+article .right-col .footer img {
+  width: 100%;
+}
+article .right-col .footer .col-md-3 p {
+  font-size: 12px;
+  padding: 6px;
+  margin: 4px;
+  border: solid silver 1px;
+  background: #fff7e2;
+}
+
+/*# sourceMappingURL=certificate-pdf.css.map */

@@ -1,0 +1,15 @@
+#drupal-off-canvas {
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  select[multiple] {
+    padding: 0;
+    overflow: scroll;
+    min-height: 220px;
+    width: 100%;
+  }
+}
+#drupal-off-canvas .layout-selection div {
+  all: inherit;
+}

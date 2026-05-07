@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+
+  RewriteEngine On
+  RewriteOptions Inherit
+
+  RewriteCond %{REQUEST_URI} !/Proxy\.php$
+
+</IfModule>

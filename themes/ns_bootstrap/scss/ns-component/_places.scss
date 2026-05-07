@@ -1,0 +1,34 @@
+.page-node-type-parish, .page-node-type-wild-place {
+  .field--label {
+    @include solid-heading;
+    margin: $gap 0;
+  }
+  #map-container {
+    margin: $gap 0;
+  }
+  .view-parish-latest-news {
+    @include shadow;
+    border: solid $dark-outline 1px;
+    padding: $gap;
+  }
+  .field--name-dynamic-block-fieldnode-place-species-count {
+    margin-top: $gap;
+  }
+  #species-count-script {
+    margin-top: 8px;
+  }
+}
+.page-node-type-parish {
+  .view-latest-stories {
+    h3 {
+      margin-top: $gap;
+    }
+  }
+  #views-exposed-form-search-content-page-1 {
+    margin-top: 8px;
+  }
+}
+.idc-output-cardGallery .es-card-gallery .card h3 {
+  background: none;
+  padding: 2px 0;
+}

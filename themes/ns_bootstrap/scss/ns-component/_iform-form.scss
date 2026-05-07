@@ -1,0 +1,20 @@
+#ctrl-wrap-wild_place_hidden {
+  display: none;
+}
+
+#ctrl-wrap-sample-date {
+  input {
+    // ensures date picker overlays map
+    position: relative;
+    z-index: 1000;
+  }
+}
+
+.help-tip.badge {
+  background-color: #4444aa;
+  margin: 0 6px;
+}
+
+.species-grid th {
+  white-space: nowrap;
+}

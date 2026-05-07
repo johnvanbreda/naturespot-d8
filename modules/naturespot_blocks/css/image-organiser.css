@@ -1,0 +1,16 @@
+#image-organiser .fa-trash-alt {
+  display: none;
+}
+
+#image-organiser #images-unused li .fa-trash-alt {
+  color: grey;
+  cursor: pointer;
+  display: inline-block;
+  padding: 4px;
+  border-radius: 3px;
+}
+
+#image-organiser #images-unused li.deleted .fa-trash-alt {
+  color:white;
+  background: red;
+}

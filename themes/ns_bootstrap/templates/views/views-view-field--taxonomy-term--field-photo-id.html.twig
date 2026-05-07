@@ -1,0 +1,47 @@
+{% set value = output|trim %}
+{% if value is not empty %}
+  {% if value == "G" %}
+    {% set colour = "green" %}
+    {% set title = "Common and easily identified." %}
+  {% elseif value == "A" %}
+    {% set colour = "amber" %}
+    {% set title = "Identifiable with care and/or uncommon." %}
+  {% elseif value == "R" %}
+    {% set colour = "red" %}
+    {% set title = "Requires detailed examination to identify and/or scarce." %}
+  {% else %}
+    {% set complex = true %}
+    {% set part = value|split('[') %}
+    {% set part = attribute(part, 1)|split(']') %}
+    {% set part = attribute(part, 0) %}
+    {% set msg = value|replace({
+        '[G]' :
+        '[Common and easily identified.]',
+        '[A]' :
+        '[Identifiable with care and/or uncommon.]',
+        '[R]' :
+        '[Requires detailed examination to identify and/or scarce.]'
+       })
+    %}
+    {% set value = '<span title="' ~ msg ~ '">' ~ part|replace({
+        'G' :
+        '<img src="#path#/PhotoID_green.jpg" width="32" height="20"  />',
+        'A' :
+        '<img src="#path#/PhotoID_amber.jpg" width="32" height="20" />',
+        'R' :
+        '<img src="#path#/PhotoID_red.jpg" width="32" height="20" />'
+       }) ~ '<img src="#path#/warning.png" width="20" height="20" /></span>'
+    %}
+    {%
+       set value = value|replace({
+        '#path#' : url('<front>')|render ~ 'sites/default/files/upload'
+       })
+    %}
+  {%  endif %}
+
+  {% if complex is defined %}
+    <span class="photo-id-icon pull-right panel panel-info small">{{ value|raw }}</span>
+  {% else %}
+    <img class="photo-id-icon pull-right" src="{{ url('<front>') }}sites/default/files/upload/PhotoID_{{ colour }}.jpg" />
+  {% endif %}
+{% endif %}

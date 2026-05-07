@@ -1,0 +1,170 @@
+@use "sass:color";
+
+.page-node-type-wildlife-guide {
+  #header-banner .bs-region--main {
+    position: relative;
+    .block-layout-builder {
+      &.block-field-blocknodewildlife-guidetitle {
+        position: absolute;
+        font-size: 3.5vw;
+        max-width: 70%;
+        text-align: center;
+        font-family: Calibri, sans-serif ;
+        color: #3237f1;
+        z-index: 100;
+        top: 5px;
+        left: 15px;
+      }
+    }
+  }
+  .block-field-blocknodewildlife-guidefield-panorama-image {
+    margin-top: 15px;
+  }
+
+  /* Page width smaller so reduce title font a bit */
+  .printing {
+    /* Remove quite edit buttons */
+    div.contextual {
+      display: none;
+    }
+    .block-field-blocknodewildlife-guidefield-panorama-image img {
+      max-height: 180px;
+      object-fit: cover;
+    }
+    #header-banner .bs-region--main {
+      .block-layout-builder {
+        &.block-field-blocknodewildlife-guidetitle {
+          font-size: 30px;
+        }
+      }
+    }
+    .col-md-3 {
+      img {
+        max-height: 220px;
+      }
+    }
+    h2.block-title {
+      margin-top: 4px;
+    }
+    .views-field-edit-node, .views-field-edit-node-1 {
+      display: none;
+    }
+    .views-field-field-image-url p, .alert-success, p {
+      font-size: 1.2rem;
+    }
+    .alert-success {
+      a {
+        text-decoration: none;
+        font-weight: normal;
+        color: #3c763d;
+      }
+    }
+  }
+
+  .block-field-blocknodewildlife-guidetitle {
+    font-size: 25px;
+  }
+  .alert-success {
+    background-color: color.scale(#b9dfcf, $lightness: 70%);
+    margin: 8px 0;
+    a, a:hover {
+      text-decoration: underline;
+    }
+    a {
+      color: #337ab7;
+    }
+    a:hover {
+      color: #23527c;
+    }
+  }
+  .view-content {
+    .views-row {
+      margin: 4px 0;
+    }
+    .views-row, .views-row * {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    .views-row * {
+      break-after: avoid !important;
+      break-before: avoid !important;
+      page-break-after: avoid !important;
+      page-break-before: avoid !important;
+    }
+    h3 {
+      background: none;
+      margin-bottom: 4px;
+      margin-top: 8px;
+      padding-top: 4px;
+      padding-left: 0;
+    }
+    .main-img {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: solid silver 2px;
+      img {
+        width: 100%;
+        max-height: 240px;
+        object-fit: cover;
+      }
+    }
+    .guide-info {
+      img {
+        width: 100%;
+        height: auto;
+        padding: 2%;
+      }
+    }
+    .views-field-edit-node, .views-field-edit-node-1 {
+      a {
+        margin: 4px;
+        padding: 4px;
+        font-size: 1.2rem;
+        display: inline-block;
+        background: #e7e7e7;
+        border: solid silver 1px;
+        border-radius: 4px;
+        &:hover {
+          background: #d7d7d7;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .page-node-type-wildlife-guide {
+    #header-banner .bs-region--main {
+      .block-layout-builder {
+        &.block-field-blocknodewildlife-guidetitle {
+          font-size: 30px;
+          left: 25px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .page-node-type-wildlife-guide {
+    #header-banner .bs-region--main {
+      .block-layout-builder {
+        &.block-field-blocknodewildlife-guidetitle {
+          font-size: 40px;
+          left: 45px;
+        }
+      }
+    }
+    .view-content {
+      .main-img {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+      }
+      h3 {
+        margin-top: 0;
+        border-top: solid silver 1px;
+      }
+    }
+  }
+}

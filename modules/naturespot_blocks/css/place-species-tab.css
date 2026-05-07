@@ -1,0 +1,6 @@
+.form-inline label {
+  margin: 0;
+}
+.form-inline label input {
+  margin: 0 4px 0 0;
+}

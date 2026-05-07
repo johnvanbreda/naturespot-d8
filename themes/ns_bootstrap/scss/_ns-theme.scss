@@ -1,0 +1,210 @@
+// NatureSpot theme specifics
+
+$gap: 8px;
+$page-colour: #eee;
+$alert-colour: #FF7777;
+$dark-outline: grey;
+$light-outline: silver;
+$heading-background-colour: #b9dfcf;
+$menu-background-colour: #dddddd;
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin shadow() {
+  -webkit-box-shadow: 2px 2px 4px silver;
+  -moz-box-shadow: 2px 2px 4px silver;
+  box-shadow: 2px 2px 4px silver;
+}
+
+@mixin solid-heading($background: $heading-background-colour) {
+  background: $background;
+  padding: $gap / 2;
+}
+
+@mixin image-panel() {
+  border: solid $dark-outline 1px;
+  background-color: #ffffff;
+  @include border-radius(4px);
+  @include shadow;
+  padding: 2px;
+  text-align: center;
+}
+
+@import 'ns-component/reports';
+@import 'ns-component/views';
+@import 'ns-component/places';
+@import 'ns-component/species';
+@import 'ns-component/jump-menus';
+@import 'ns-component/forums';
+@import 'ns-component/home';
+@import 'ns-component/iform-form';
+@import 'ns-component/image-organiser';
+@import 'ns-component/search';
+@import 'ns-component/menu';
+@import 'ns-component/loading-overlay';
+@import 'ns-component/galleries';
+@import 'ns-component/tabs';
+@import 'ns-component/wildlife-guide';
+@import 'ns-component/layout-builder';
+
+/** Bootstrap tweaks */
+.row-no-padding {
+  padding: 0 $gap;
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+.tab-content {
+  padding-top: $gap;
+}
+
+/* General HTML */
+h1 {
+  font-size: 25px;
+}
+
+h2 {
+  font-size: 20px;
+  @include solid-heading;
+}
+
+h3 {
+  font-size: 18px;
+  @include solid-heading(darken($page-colour, 5%));
+}
+
+.container {
+  background-color: $page-colour;
+}
+
+header#navbar {
+  min-height: 30px;
+  margin: 8px;
+  background-color: #333333;
+  #block-secondarylinks {
+    .navbar-nav {
+      background-color: #444444;
+      > li {
+        a {
+          padding: $gap - 2 $gap;
+          font-size: 12px;
+          color: $page-colour;
+        }
+        &.active a, &.open a{
+          background-color: #444444;
+        }
+      }
+    }
+    .dropdown-menu > li {
+      float: none;
+    }
+  }
+}
+#banner {
+  background: #7a9842;
+  padding: 0;
+  margin-bottom: $gap;
+  container-type: inline-size;
+  .region-header {
+    display: none;
+  }
+  #frog-image {
+    display: none;
+  }
+  #ns-title-image {
+    /* Centre the title */
+    margin: auto;
+    display: block;
+    width: 100%;
+  }
+  #learn-strapline {
+    position: absolute;
+    top: 50%;
+    color: #040;
+    /* Size and position based on banner width using container query */
+    font-size: calc(0.7rem + 1.5cqw);
+    right: calc(5cqw);
+    font-weight: bold;
+    transform: translateY(-50%);
+    text-align: center;
+  }
+}
+#block-ns-bootstrap-main-menu {
+  font-size: 16px;
+  .container-fluid {
+    padding-bottom: 0;
+    background: $menu-background-colour;
+  }
+}
+@media (min-width: $screen-lg-min) {
+  #banner {
+    #frog-image {
+      display: inline;
+    }
+    #ns-title-image {
+      /* Right align the title */
+      margin: 0;
+      display: inline;
+      float: right !important;
+      width: auto;
+    }
+    #learn-strapline {
+      right: calc(3cqw);
+    }
+  }
+}
+@media (max-width: 560px) {
+  #banner {
+    #ns-title-image {
+      width: 100%;
+    }
+  }
+}
+div.main-container {
+  padding-bottom: $gap;
+}
+#block-speciesnavigation {
+  a {
+    padding: $gap / 4 0 $gap / 4 8px;
+  }
+}
+
+/* Show BSBI link block only on plant pages */
+.field--name-dynamic-block-fieldtaxonomy-term-bsbi-link {
+  display: none;
+}
+
+.field--name-dynamic-block-fieldtaxonomy-term-bsbi-link {
+  display: block;
+}
+
+iframe.map-frame {
+  @include image-panel;
+}
+
+/* Some extra helpers */
+/* Add class="in-box" to create a nice frame around an element. */
+.in-box {
+  @include shadow;
+  border: solid $dark-outline 1px;
+  padding: $gap;
+}
+/* Add class="full-width" to make an element occupy width of the parent container. */
+.full-width {
+  width: 100%;
+}
+.padded {
+  padding: $gap;
+}
+
+/* Tweaks to Bootstrap helpers */
+.bg-primary a {
+  color: white;
+}
