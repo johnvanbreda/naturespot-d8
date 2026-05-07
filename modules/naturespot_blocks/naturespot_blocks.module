@@ -54,7 +54,7 @@ function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBa
       $menuTid = 19249;
     }
     else {
-      $menuTid = array_pop($path_args);
+      $menuTid = (int) array_pop($path_args);
     }
     $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($menuTid);
     $topMenuTerm = array_pop($parents);
@@ -112,8 +112,8 @@ function naturespot_blocks_form_user_login_form_alter(&$form, $form_state) {
 }
 
 function naturespot_blocks_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  $view = $form_state->getStorage('view');
-  if ($form_id === 'views_exposed_form' && $view['view']->id() === 'search_content') {
+  $view = $form_state->getStorage();
+  if (isset($view) && $form_id === 'views_exposed_form' && $view['view']->id() === 'search_content') {
     $form['#theme'] = 'views_search_exposed_form';
   }
   elseif (($form_id === 'user_form' || $form_id === 'user_register_form')) {

@@ -22,10 +22,7 @@ class Species100SettingsForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'species_100_email_subject',
-      'species_100_email_body',
-      'species_100_achievement_email_subject',
-      'species_100_achievement_email_body',
+      'naturespot_blocks.settings',
     ];
   }
 

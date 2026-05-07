@@ -2,7 +2,7 @@
 
 namespace Drupal\naturespot_blocks;
 
-class updateTvks {
+class UpdateTvks {
 
   public static function updateTvkItem($item, &$context) {
     $context['sandbox']['current_item'] = $item;

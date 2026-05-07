@@ -27,6 +27,9 @@ class TaxonomyBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     if ($node) {
       return $node->getType() == 'species';
     }
+    else {
+      return FALSE;
+    }
   }
 
   /**

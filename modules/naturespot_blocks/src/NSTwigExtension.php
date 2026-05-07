@@ -35,7 +35,7 @@ class NSTwigExtension extends AbstractExtension {
     $plugin_block = $block_manager->createInstance($id, $config);
     $render = $plugin_block->build();
     $render_service = \Drupal::service('renderer');
-    return $render_service->renderPlain($render);
+    return $render_service->renderInIsolation($render);
   }
 
 }

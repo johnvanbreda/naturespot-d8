@@ -257,22 +257,32 @@ class NsBlockController extends ControllerBase {
   }
 
   private function taxonomyCreate($vid) {
-    if (empty($_POST['taxon']) || empty($_POST['redirect'])) {
+    $request = \Drupal::service('request_stack')->getCurrentRequest();
+    if (empty($request->request->get('taxon')) || empty($request->request->get('redirect'))) {
       \Drupal::logger('naturespot_blocks')->error('Invalid call to taxonomyCreate');
       return $this->redirect('<front>');
     }
     else {
       $termData = [
-        'name' => $_POST['taxon'],
-        'description' => $_POST['description'],
+        'name' => $request->request->get('taxon'),
+        'description' => $request->request->get('description'),
         'vid' => $vid,
       ];
-      if (!empty($_POST['parent_id'])) {
-        $termData['parent'] = $_POST['parent_id'];
+      if (!empty($request->request->get('parent_id'))) {
+        $termData['parent'] = $request->request->get('parent_id');
       }
       Term::create($termData)->save();
     }
-    return new RedirectResponse($_POST['redirect']);
+    $redirect = $request->request->get('redirect');
+    // Validate redirect URL - only allow species-taxonomy-child/{id} or
+    // species-taxonomy-top.
+    // Strip optional protocol and base URL at the start.
+    $baseUrl = \Drupal::request()->getSchemeAndHttpHost() . base_path();
+    $redirect = preg_replace('#^' . preg_quote($baseUrl, '#') . '#', '/', $redirect);
+    if (!preg_match('#^/species-taxonomy-child/\d+$#', $redirect) && $redirect !== '/species-taxonomy-top') {
+      $redirect = '/species-taxonomy-top';
+    }
+    return new RedirectResponse($redirect);
   }
 
   public function taxonCreate() {

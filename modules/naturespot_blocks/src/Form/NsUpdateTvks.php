@@ -71,7 +71,7 @@ class NsUpdateTvks extends FormBase {
     $data = $this->csvToArray($file->getFileUri());
     foreach ($data as $row) {
       $operations[] = [
-        '\Drupal\naturespot_blocks\updateTvks::updateTvkItem',
+        '\Drupal\naturespot_blocks\UpdateTvks::updateTvkItem',
         [$row],
       ];
     }
@@ -80,7 +80,7 @@ class NsUpdateTvks extends FormBase {
       'title' => t('Importing Data...'),
       'operations' => $operations,
       'init_message' => t('Import is starting.'),
-      'finished' => '\Drupal\naturespot_blocks\updateTvks::updateTvkItemCallback',
+      'finished' => '\Drupal\naturespot_blocks\UpdateTvks::updateTvkItemCallback',
     ];
     batch_set($batch);
   }
