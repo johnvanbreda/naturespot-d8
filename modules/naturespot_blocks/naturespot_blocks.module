@@ -107,7 +107,7 @@ function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBa
 }
 
 function naturespot_blocks_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
-  if ($view->id() === 'parish_latest_news' && $display_id === 'block_1') {
+  if (in_array($view->id(), ['parish_latest_news', 'wild_places_for_parish']) && $display_id === 'block_1') {
     \Drupal::messenger()->addMessage('Pre view for ' . $view->id() . ' display ' . $display_id);
     $node = \Drupal::routeMatch()->getParameter('node');
     if (!$node instanceof NodeInterface) {
@@ -120,8 +120,12 @@ function naturespot_blocks_views_pre_view(ViewExecutable $view, $display_id, arr
     }
     if ($node->hasField('field_parish') && !$node->get('field_parish')->isEmpty()) {
       $args[0] = $node->get('field_parish')->value;
-      \Drupal::messenger()->addMessage('Filtering parish news for ' . $args[0]);
+      \Drupal::messenger()->addMessage('Filtering ' . $view->id() . ' for ' . $args[0]);
     }
+  }
+  elseif ($view->id() === 'my_species_library_images_count' && $display_id === 'block_1') {
+    $user = \Drupal::currentUser();
+    $args[0] = $user->getAccountName();
   }
 }
 
