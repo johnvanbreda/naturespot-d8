@@ -1,14 +1,14 @@
 <?php
 
-use Drupal\views\Views;
-use Drupal\views\ViewExecutable;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
-use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\user\Entity\User;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
+use Drupal\user\Entity\User;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
 
 define('NS_GRANT_ALL', 51);
 
@@ -102,6 +102,25 @@ function naturespot_blocks_views_query_alter(ViewExecutable $view, QueryPluginBa
       $join = Views::pluginManager('join')->createInstance('standard', $configuration);
       $query->addRelationship('node__field_priority', $join, 'taxa_taxonomy_term_field_data');
       $query->addWhere(0, 'node__field_priority.field_priority_value', 1);
+    }
+  }
+}
+
+function naturespot_blocks_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'parish_latest_news' && $display_id === 'block_1') {
+    \Drupal::messenger()->addMessage('Pre view for ' . $view->id() . ' display ' . $display_id);
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if (!$node instanceof NodeInterface) {
+      \Drupal::messenger()->addMessage('No node found.');
+      return;
+    }
+    if ($node->bundle() !== 'parish') {
+      \Drupal::messenger()->addMessage('Node is not a parish.');
+      return;
+    }
+    if ($node->hasField('field_parish') && !$node->get('field_parish')->isEmpty()) {
+      $args[0] = $node->get('field_parish')->value;
+      \Drupal::messenger()->addMessage('Filtering parish news for ' . $args[0]);
     }
   }
 }
