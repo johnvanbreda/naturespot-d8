@@ -71,7 +71,7 @@ class NsUpdateWarehouseImagePaths extends FormBase {
     $data = $this->csvToArray($file->getFileUri());
     foreach ($data as $row) {
       $operations[] = [
-        '\Drupal\naturespot_blocks\UpdateWarehouseImagePaths::updateWarehouseImagePathItem',
+        '\Drupal\naturespot_blocks\updateWarehouseImagePaths::updateWarehouseImagePathItem',
         [$row],
       ];
     }
@@ -80,7 +80,7 @@ class NsUpdateWarehouseImagePaths extends FormBase {
       'title' => t('Importing Data...'),
       'operations' => $operations,
       'init_message' => t('Import is starting.'),
-      'finished' => '\Drupal\naturespot_blocks\UpdateWarehouseImagePaths::updateWarehouseImagePathItemCallback',
+      'finished' => '\Drupal\naturespot_blocks\updateWarehouseImagePaths::updateWarehouseImagePathItemCallback',
     ];
     batch_set($batch);
   }

@@ -2,7 +2,7 @@
 
 namespace Drupal\naturespot_blocks;
 
-class updateWarehouseImagePaths {
+class UpdateWarehouseImagePaths {
 
   public static function updateWarehouseImagePathItem($item, &$context) {
     $context['sandbox']['current_item'] = $item;
