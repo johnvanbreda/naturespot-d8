@@ -129,7 +129,7 @@ class NsBlockController extends ControllerBase {
   public function speciesRecordingAdvice() {
     if (empty($_GET['key'])) {
       \Drupal::logger('naturespot_blocks')->error('Missing key in call to species_by_key path');
-      return ['#markup' => 'Missing key'];
+      return new JsonResponse(['msg' => '', 'additional' => 'Missing key']);
     }
     $query = \Drupal::entityQuery('node')
       ->condition('status', 1)
@@ -139,7 +139,7 @@ class NsBlockController extends ControllerBase {
 
     $result = $query->execute();
     if (count($result) === 0) {
-      return ['#markup' => 'Species not found'];
+      return new JsonResponse(['msg' => '', 'additional' => 'Species not found']);
     }
     $nodes = Node::loadMultiple($result);
     $markup = '';
