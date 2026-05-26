@@ -178,7 +178,7 @@ HTML;
     "bool": {
       "must": [
         { "term": {
-          "taxon.accepted_taxon_id": "$nbnKey"
+          "taxon.species_taxon_id": "$nbnKey"
         } },
         { "term": {
           "metadata.website.id": 8
@@ -229,7 +229,7 @@ JSON;
     "bool": {
       "must": [
         { "term": {
-          "taxon.accepted_taxon_id": "$nbnKey"
+          "taxon.species_taxon_id": "$nbnKey"
         } },
         { "term": {
           "metadata.website.id": 8
@@ -303,7 +303,7 @@ JSON;
     "this_species": {
       "filter": {
         "term": {
-          "taxon.accepted_taxon_id": "$nbnKey"
+          "taxon.species_taxon_id": "$nbnKey"
         }
       },
       "aggs": {

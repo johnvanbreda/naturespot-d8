@@ -64,7 +64,7 @@ class NsEsSpeciesLatestImages8Block extends BlockBase {
           ],
           [
             'query_type' => 'term',
-            'field' => 'taxon.accepted_taxon_id',
+            'field' => 'taxon.species_taxon_id',
             'value' => $nbnKey,
           ],
         ],

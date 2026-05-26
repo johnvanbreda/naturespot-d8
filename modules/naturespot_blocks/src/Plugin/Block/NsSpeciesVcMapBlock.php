@@ -87,7 +87,7 @@ mapSettingsHooks.push(function(opts) {
         bool: {
           must: [
             {
-              term: {'taxon.accepted_taxon_id': '$nbnKey'}
+              term: {'taxon.species_taxon_id': '$nbnKey'}
             },
             {
               term: {'metadata.website.id': '8'}

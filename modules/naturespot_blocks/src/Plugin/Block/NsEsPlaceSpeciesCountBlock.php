@@ -60,7 +60,7 @@ class NsEsPlaceSpeciesCountBlock extends BlockBase {
       'aggregation' => [
         'species_count' => [
           'cardinality' => [
-            'field' => 'taxon.accepted_taxon_id',
+            'field' => 'taxon.species_taxon_id',
           ],
         ],
       ],
