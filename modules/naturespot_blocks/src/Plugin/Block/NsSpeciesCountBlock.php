@@ -21,15 +21,23 @@ class NsSpeciesCountBlock extends BlockBase {
   public function build() {
     iform_load_helpers(['report_helper', 'ElasticsearchReportHelper']);
     $config = \Drupal::config('iform.settings');
-    $readAuth = \report_helper::get_read_auth($config->get('website_id'), $config->get('password'));
-    $countData = \report_helper::get_report_data([
-      'dataSource' => 'projects/naturespot/species_in_list_count',
-      'readAuth' => $readAuth,
-      'mode' => 'report',
-      'caching' => TRUE,
-      'cachePerUser' => FALSE,
-      'cachetimeout' => 14400,
-    ]);
+    try {
+      $readAuth = \report_helper::get_read_auth($config->get('website_id'), $config->get('password'));
+      $countData = \report_helper::get_report_data([
+        'dataSource' => 'projects/naturespot/species_in_list_count',
+        'readAuth' => $readAuth,
+        'mode' => 'report',
+        'caching' => TRUE,
+        'cachePerUser' => FALSE,
+        'cachetimeout' => 14400,
+      ]);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('naturespot_blocks')->alert("Fetching species count failed: " . $e->getMessage());
+      return [
+        '#markup' => Markup::create('<div class="alert alert-info">Server unavailable.</div>'),
+      ];
+    }
     $count = $countData[0]['count'];
     $year = Date('Y');
     $r = <<<HTML

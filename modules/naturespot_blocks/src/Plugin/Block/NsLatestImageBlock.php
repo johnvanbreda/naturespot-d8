@@ -55,7 +55,15 @@ HTML;
         ['content' => $template],
       ],
     ];
-    $r = \report_helper::freeform_report($options);
+    try {
+      $r = \report_helper::freeform_report($options);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('naturespot_blocks')->alert("Fetching latest image failed: " . $e->getMessage());
+      return [
+        '#markup' => Markup::create('<div class="alert alert-info">Server unavailable.</div>'),
+      ];
+    }
     // Correct default paths for D8 since we are outside the iform module.
     global $indicia_theme_path;
     $indicia_theme_path = iform_media_folder_path() . 'themes/';
